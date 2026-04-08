@@ -4,9 +4,9 @@ import { Stethoscope, AlertTriangle, ShieldCheck, Fish, Search, ChevronLeft, Bot
 import { GoogleGenAI } from "@google/genai";
 import ReactMarkdown from "react-markdown";
 
-// Use the new API key if available, otherwise fallback to the default one
-const apiKey = process.env.GEMINI_API_KEY2 || process.env.GEMINI_API_KEY;
-const ai = new GoogleGenAI({ apiKey });
+// Safe initialization to prevent app crash if env var is missing in Vercel
+const apiKey = process.env.GEMINI_API_KEY2 || process.env.GEMINI_API_KEY || "";
+const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 const DISEASES_DATA = {
   tilapia: {
@@ -161,6 +161,12 @@ export default function Diseases() {
     setIsDiagnosing(true);
     setDiagnosisError("");
     setDiagnosisResult("");
+
+    if (!ai) {
+      setDiagnosisError("⚠️ مفتاح الذكاء الاصطناعي (GEMINI_API_KEY) غير متوفر. يرجى إضافته في إعدادات Vercel (Environment Variables) ثم إعادة بناء المشروع (Redeploy).");
+      setIsDiagnosing(false);
+      return;
+    }
 
     try {
       const prompt = `أنا مربي أسماك وعندي مشكلة في الحوض. 

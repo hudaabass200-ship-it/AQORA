@@ -3,7 +3,8 @@ import { GoogleGenAI } from "@google/genai";
 import { Send, Bot, User, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const apiKey = process.env.GEMINI_API_KEY || "";
+const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 interface Message {
   id: string;
@@ -37,6 +38,16 @@ export default function AIChat() {
     const userMsg = input.trim();
     setInput("");
     setMessages((prev) => [...prev, { id: Date.now().toString(), role: "user", content: userMsg }]);
+    
+    if (!ai) {
+      setMessages((prev) => [...prev, { 
+        id: Date.now().toString(), 
+        role: "model", 
+        content: "⚠️ عذراً، مفتاح الذكاء الاصطناعي (GEMINI_API_KEY) غير متوفر. لحل هذه المشكلة:\n1. اذهب إلى إعدادات مشروعك في Vercel.\n2. ادخل إلى قسم Environment Variables.\n3. أضف متغير باسم `GEMINI_API_KEY` وضع فيه مفتاحك.\n4. قم بعمل Redeploy للمشروع." 
+      }]);
+      return;
+    }
+
     setIsLoading(true);
 
     try {
