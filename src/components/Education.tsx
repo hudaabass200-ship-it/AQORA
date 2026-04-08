@@ -6,7 +6,7 @@ const FISH_DATA = [
   {
     id: "tilapia",
     name: "البلطي (Tilapia)",
-    image: "https://picsum.photos/seed/tilapia/800/400?blur=2",
+    image: "https://images.unsplash.com/photo-1524704796725-9fc3044a58b2?auto=format&fit=crop&w=800&q=80",
     description: "السمكة الأكثر شعبية في مصر. تتحمل الظروف القاسية وتنمو بسرعة. مثالية للمربين المبتدئين.",
     waterType: "مياه عذبة",
     temp: "25 - 30 درجة مئوية",
@@ -21,7 +21,7 @@ const FISH_DATA = [
   {
     id: "seabass",
     name: "القاروص (Sea Bass)",
-    image: "https://picsum.photos/seed/seabass/800/400?blur=2",
+    image: "https://images.unsplash.com/photo-1534043464124-3be32fe000c9?auto=format&fit=crop&w=800&q=80",
     description: "سمكة بحرية ذات قيمة اقتصادية عالية. تحتاج إلى رعاية أكبر وجودة مياه ممتازة.",
     waterType: "مياه مالحة / شروب",
     temp: "22 - 28 درجة مئوية",
@@ -36,7 +36,7 @@ const FISH_DATA = [
   {
     id: "seabream",
     name: "الدنيس (Sea Bream)",
-    image: "https://picsum.photos/seed/seabream/800/400?blur=2",
+    image: "https://images.unsplash.com/photo-1511556820780-d912e42b4980?auto=format&fit=crop&w=800&q=80",
     description: "من أجود أنواع الأسماك البحرية في السوق المصري. تتطلب خبرة في التغذية وإدارة الأحواض.",
     waterType: "مياه مالحة",
     temp: "18 - 26 درجة مئوية",
