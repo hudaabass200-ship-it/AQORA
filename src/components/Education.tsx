@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { Fish, Waves, ThermometerSun, Info, ChevronLeft } from "lucide-react";
+import { Fish, Waves, ThermometerSun, Info, ChevronLeft, Camera } from "lucide-react";
 
 const FISH_DATA = [
   {
@@ -52,6 +52,32 @@ const FISH_DATA = [
 
 export default function Education() {
   const [selectedFish, setSelectedFish] = useState<string | null>(null);
+  const [customImages, setCustomImages] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    const stored = localStorage.getItem('customFishImages');
+    if (stored) {
+      try {
+        setCustomImages(JSON.parse(stored));
+      } catch (e) {}
+    }
+  }, []);
+
+  const handleImageUpload = (fishId: string, event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        const newImages = { ...customImages, [fishId]: base64String };
+        setCustomImages(newImages);
+        localStorage.setItem('customFishImages', JSON.stringify(newImages));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const getImage = (fish: any) => customImages[fish.id] || fish.image;
 
   if (selectedFish) {
     const fish = FISH_DATA.find((f) => f.id === selectedFish)!;
@@ -70,10 +96,15 @@ export default function Education() {
         </button>
 
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-          <div className="h-64 overflow-hidden relative">
-            <img src={fish.image} alt={fish.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-              <h2 className="text-3xl font-bold text-white">{fish.name}</h2>
+          <div className="h-64 overflow-hidden relative group/img bg-slate-50">
+            <img src={getImage(fish)} alt={fish.name} className="w-full h-full object-contain p-2" referrerPolicy="no-referrer" />
+            <label className="absolute top-4 left-4 bg-black/40 hover:bg-black/60 backdrop-blur-md p-2 rounded-xl cursor-pointer transition-colors z-10 text-white flex items-center gap-2" title="تغيير الصورة">
+              <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(fish.id, e)} />
+              <Camera className="w-5 h-5" />
+              <span className="text-sm font-medium pr-1">تغيير الصورة</span>
+            </label>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6 pointer-events-none">
+              <h2 className="text-3xl font-bold text-white drop-shadow-md">{fish.name}</h2>
             </div>
           </div>
 
@@ -129,13 +160,23 @@ export default function Education() {
             onClick={() => setSelectedFish(fish.id)}
             className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden cursor-pointer hover:shadow-md transition-all hover:-translate-y-1 group"
           >
-            <div className="h-48 overflow-hidden">
+            <div className="h-48 overflow-hidden relative group/img bg-slate-50">
               <img 
-                src={fish.image} 
+                src={getImage(fish)} 
                 alt={fish.name} 
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500"
                 referrerPolicy="no-referrer"
               />
+              <label 
+                className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity cursor-pointer z-10"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(fish.id, e)} />
+                <div className="text-white flex flex-col items-center">
+                  <Camera className="w-8 h-8 mb-2" />
+                  <span className="text-sm font-medium">تغيير الصورة</span>
+                </div>
+              </label>
             </div>
             <div className="p-5">
               <h3 className="text-xl font-bold text-slate-800 mb-2 flex items-center">

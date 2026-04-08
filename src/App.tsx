@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BookOpen, Activity, MessageSquare, Menu, X, Calculator as CalcIcon, Wallet, Newspaper, Stethoscope, Mail, Phone } from "lucide-react";
+import { BookOpen, Activity, MessageSquare, Menu, X, Calculator as CalcIcon, Wallet, Newspaper, Stethoscope, Mail, Phone, ClipboardList } from "lucide-react";
 import Education from "./components/Education";
 import IoTMonitor from "./components/IoTMonitor";
 import AIChat from "./components/AIChat";
@@ -7,8 +7,9 @@ import Calculator from "./components/Calculator";
 import Expenses from "./components/Expenses";
 import LatestUpdates from "./components/LatestUpdates";
 import Diseases from "./components/Diseases";
+import DailyLog from "./components/DailyLog";
 
-type Tab = "education" | "monitor" | "chat" | "calculator" | "expenses" | "updates" | "diseases";
+type Tab = "education" | "monitor" | "chat" | "calculator" | "expenses" | "updates" | "diseases" | "dailyLog";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>("education");
@@ -17,6 +18,7 @@ export default function App() {
   const tabs = [
     { id: "education", label: "أكاديمية الاستزراع", icon: BookOpen },
     { id: "diseases", label: "دليل الأمراض", icon: Stethoscope },
+    { id: "dailyLog", label: "سجل العمليات اليومي", icon: ClipboardList },
     { id: "monitor", label: "مراقبة الأحواض (IoT)", icon: Activity },
     { id: "calculator", label: "حاسبة العلف", icon: CalcIcon },
     { id: "expenses", label: "سجل المصروفات", icon: Wallet },
@@ -94,6 +96,7 @@ export default function App() {
         <div className="max-w-6xl mx-auto">
           {activeTab === "education" && <Education />}
           {activeTab === "diseases" && <Diseases />}
+          {activeTab === "dailyLog" && <DailyLog />}
           {activeTab === "monitor" && <IoTMonitor />}
           {activeTab === "calculator" && <Calculator />}
           {activeTab === "expenses" && <Expenses />}
