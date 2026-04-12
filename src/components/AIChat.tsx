@@ -1,10 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { GoogleGenAI } from "@google/genai";
 import { Send, Bot, User, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-
-const apiKey = process.env.GEMINI_API_KEY || "";
-const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
+import { getAIClient, FISH_FARMING_SYSTEM_INSTRUCTION, FISH_FARMING_TOOLS } from "../lib/ai";
+import { getEgyptAquacultureProduction, getFishSpeciesInfo, getFishTaxonomy } from "../lib/api-tools";
 
 interface Message {
   id: string;
@@ -39,11 +37,13 @@ export default function AIChat() {
     setInput("");
     setMessages((prev) => [...prev, { id: Date.now().toString(), role: "user", content: userMsg }]);
     
+    const ai = getAIClient();
+
     if (!ai) {
       setMessages((prev) => [...prev, { 
         id: Date.now().toString(), 
         role: "model", 
-        content: "⚠️ عذراً، مفتاح الذكاء الاصطناعي (GEMINI_API_KEY) غير متوفر. لحل هذه المشكلة:\n1. اذهب إلى إعدادات مشروعك في Vercel.\n2. ادخل إلى قسم Environment Variables.\n3. أضف متغير باسم `GEMINI_API_KEY` وضع فيه مفتاحك.\n4. قم بعمل Redeploy للمشروع." 
+        content: "⚠️ عذراً، مفتاح الذكاء الاصطناعي (API Key) غير متوفر. يرجى إضافته من صفحة الإعدادات لكي أتمكن من مساعدتك." 
       }]);
       return;
     }
@@ -52,23 +52,61 @@ export default function AIChat() {
 
     try {
       // Format history for Gemini
-      const history = messages.map(m => ({
+      let currentHistory: any[] = messages.map(m => ({
         role: m.role,
         parts: [{ text: m.content }]
       }));
+      currentHistory.push({ role: "user", parts: [{ text: userMsg }] });
 
-      const response = await ai.models.generateContent({
+      let response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
-        contents: [
-          {
-            role: "user",
-            parts: [
-              { text: "أنت خبير زراعي مصري متخصص في الاستزراع السمكي (خاصة البلطي، القاروص، والدنيس). تجيب على أسئلة المربين الصغار بأسلوب مبسط، عملي، ومناسب للبيئة المصرية. إجاباتك يجب أن تكون دقيقة ومباشرة." },
-              { text: userMsg }
-            ]
-          }
-        ],
+        contents: currentHistory,
+        config: {
+          systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
+          tools: FISH_FARMING_TOOLS
+        }
       });
+
+      let callCount = 0;
+      while (response.functionCalls && response.functionCalls.length > 0 && callCount < 3) {
+        callCount++;
+        const call = response.functionCalls[0];
+        let apiResult: any = {};
+
+        if (call.name === "getEgyptAquacultureProduction" || call.name === "get_egypt_aquaculture_production") {
+          apiResult = await getEgyptAquacultureProduction();
+        } else if (call.name === "getFishSpeciesInfo" || call.name === "get_fish_species_info") {
+          const args = call.args as any;
+          apiResult = await getFishSpeciesInfo(args.speciesName || "");
+        } else if (call.name === "getFishTaxonomy") {
+          const args = call.args as any;
+          apiResult = await getFishTaxonomy(args.speciesName || "");
+        }
+
+        currentHistory.push({
+          role: "model",
+          parts: [{ functionCall: call }]
+        });
+
+        currentHistory.push({
+          role: "user",
+          parts: [{
+            functionResponse: {
+              name: call.name,
+              response: apiResult
+            }
+          }]
+        });
+
+        response = await ai.models.generateContent({
+          model: "gemini-2.5-flash",
+          contents: currentHistory,
+          config: {
+            systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
+            tools: FISH_FARMING_TOOLS
+          }
+        });
+      }
 
       const reply = response.text || "عذراً، حدث خطأ في معالجة طلبك.";
       setMessages((prev) => [...prev, { id: Date.now().toString(), role: "model", content: reply }]);

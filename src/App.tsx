@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BookOpen, Activity, MessageSquare, Menu, X, Calculator as CalcIcon, Wallet, Newspaper, Stethoscope, Mail, Phone, ClipboardList } from "lucide-react";
+import { BookOpen, Activity, MessageSquare, Menu, X, Calculator as CalcIcon, Wallet, Newspaper, Stethoscope, Mail, Phone, ClipboardList, Sprout } from "lucide-react";
 import Education from "./components/Education";
 import IoTMonitor from "./components/IoTMonitor";
 import AIChat from "./components/AIChat";
@@ -8,14 +8,16 @@ import Expenses from "./components/Expenses";
 import LatestUpdates from "./components/LatestUpdates";
 import Diseases from "./components/Diseases";
 import DailyLog from "./components/DailyLog";
+import StartFromScratch from "./components/StartFromScratch";
 
-type Tab = "education" | "monitor" | "chat" | "calculator" | "expenses" | "updates" | "diseases" | "dailyLog";
+type Tab = "start" | "education" | "monitor" | "chat" | "calculator" | "expenses" | "updates" | "diseases" | "dailyLog";
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<Tab>("education");
+  const [activeTab, setActiveTab] = useState<Tab>("start");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const tabs = [
+    { id: "start", label: "كيف تبدأ من الصفر", icon: Sprout },
     { id: "education", label: "أكاديمية الاستزراع", icon: BookOpen },
     { id: "diseases", label: "دليل الأمراض", icon: Stethoscope },
     { id: "dailyLog", label: "سجل العمليات اليومي", icon: ClipboardList },
@@ -94,6 +96,7 @@ export default function App() {
       {/* Main Content */}
       <main className="flex-1 p-4 md:p-8 overflow-y-auto h-[calc(100vh-64px)] md:h-screen">
         <div className="max-w-6xl mx-auto">
+          {activeTab === "start" && <StartFromScratch />}
           {activeTab === "education" && <Education />}
           {activeTab === "diseases" && <Diseases />}
           {activeTab === "dailyLog" && <DailyLog />}

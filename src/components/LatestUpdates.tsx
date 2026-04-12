@@ -1,12 +1,8 @@
 import { useState } from "react";
-import { GoogleGenAI } from "@google/genai";
 import { Newspaper, Loader2, AlertCircle, ChevronDown, Droplets, Wheat, Stethoscope, Lightbulb } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { motion, AnimatePresence } from "motion/react";
-
-// Use the new API key if available, otherwise fallback to the default one
-const apiKey = process.env.GEMINI_API_KEY2 || process.env.GEMINI_API_KEY;
-const ai = new GoogleGenAI({ apiKey });
+import { getAIClient, FISH_FARMING_SYSTEM_INSTRUCTION } from "../lib/ai";
 
 const CATEGORIES = [
   { 
@@ -55,10 +51,23 @@ export default function LatestUpdates() {
     // Set loading state
     setCategoryData(prev => ({ ...prev, [id]: { content: "", isLoading: true, error: "" } }));
 
+    const ai = getAIClient();
+
+    if (!ai) {
+      setCategoryData(prev => ({ 
+        ...prev, 
+        [id]: { content: "", isLoading: false, error: "مفتاح API غير متوفر. يرجى إضافته من صفحة الإعدادات." } 
+      }));
+      return;
+    }
+
     try {
       const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
         contents: prompt,
+        config: {
+          systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
+        }
       });
       setCategoryData(prev => ({ 
         ...prev, 
