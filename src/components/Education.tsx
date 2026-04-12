@@ -6,7 +6,7 @@ const FISH_DATA = [
   {
     id: "tilapia",
     name: "البلطي (Tilapia)",
-    image: "https://images.unsplash.com/photo-1524704796725-9fc3044a58b2?auto=format&fit=crop&w=800&q=80",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Oreochromis_niloticus_1.jpg/800px-Oreochromis_niloticus_1.jpg",
     description: "السمكة الأكثر شعبية في مصر. تتحمل الظروف القاسية وتنمو بسرعة. مثالية للمربين المبتدئين.",
     waterType: "مياه عذبة",
     temp: "25 - 30 درجة مئوية",
@@ -21,7 +21,7 @@ const FISH_DATA = [
   {
     id: "seabass",
     name: "القاروص (Sea Bass)",
-    image: "https://images.unsplash.com/photo-1534043464124-3be32fe000c9?auto=format&fit=crop&w=800&q=80",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Dicentrarchus_labrax.jpg/800px-Dicentrarchus_labrax.jpg",
     description: "سمكة بحرية ذات قيمة اقتصادية عالية. تحتاج إلى رعاية أكبر وجودة مياه ممتازة.",
     waterType: "مياه مالحة / شروب",
     temp: "22 - 28 درجة مئوية",
@@ -36,7 +36,7 @@ const FISH_DATA = [
   {
     id: "seabream",
     name: "الدنيس (Sea Bream)",
-    image: "https://images.unsplash.com/photo-1511556820780-d912e42b4980?auto=format&fit=crop&w=800&q=80",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Sparus_aurata_1.jpg/800px-Sparus_aurata_1.jpg",
     description: "من أجود أنواع الأسماك البحرية في السوق المصري. تتطلب خبرة في التغذية وإدارة الأحواض.",
     waterType: "مياه مالحة",
     temp: "18 - 26 درجة مئوية",
@@ -52,18 +52,6 @@ const FISH_DATA = [
 
 export default function Education() {
   const [selectedFish, setSelectedFish] = useState<string | null>(null);
-  const [customImages, setCustomImages] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    const stored = localStorage.getItem('customFishImages');
-    if (stored) {
-      try {
-        setCustomImages(JSON.parse(stored));
-      } catch (e) {}
-    }
-  }, []);
-
-  const getImage = (fish: any) => customImages[fish.id] || fish.image;
 
   if (selectedFish) {
     const fish = FISH_DATA.find((f) => f.id === selectedFish)!;
@@ -83,7 +71,7 @@ export default function Education() {
 
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
           <div className="h-64 overflow-hidden relative group/img bg-slate-50">
-            <img src={getImage(fish)} alt={fish.name} className="w-full h-full object-contain p-2" referrerPolicy="no-referrer" />
+            <img src={fish.image} alt={fish.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6 pointer-events-none">
               <h2 className="text-3xl font-bold text-white drop-shadow-md">{fish.name}</h2>
             </div>
@@ -143,9 +131,9 @@ export default function Education() {
           >
             <div className="h-48 overflow-hidden relative group/img bg-slate-50">
               <img 
-                src={getImage(fish)} 
+                src={fish.image} 
                 alt={fish.name} 
-                className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 referrerPolicy="no-referrer"
               />
             </div>
