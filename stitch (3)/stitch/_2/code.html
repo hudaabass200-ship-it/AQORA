@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>أكاديمية الاستزراع السمكي</title>
+<!-- BEGIN: External Scripts -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              light: '#3b82f6',
+              dark: '#1e40af',
+              bg: '#f8fafc'
+            }
+          }
+        }
+      }
+    }
+  </script>
+<!-- END: External Scripts -->
+<!-- BEGIN: Custom Styles -->
+<style data-purpose="layout-and-scroll">
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+    /* Smooth transition for theme toggle */
+    .transition-colors {
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+  </style>
+<!-- END: Custom Styles -->
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors">
+<!-- BEGIN: Layout Wrapper -->
+<div class="flex min-h-screen">
+<!-- BEGIN: Sidebar Navigation -->
+<aside class="w-72 bg-white dark:bg-slate-800 border-l border-slate-200 dark:border-slate-700 flex flex-col fixed inset-y-0 right-0 z-50" id="sidebar">
+<!-- Sidebar Header -->
+<div class="p-6 border-b border-slate-100 dark:border-slate-700">
+<h1 class="text-2xl font-bold text-brand-light">مرشد الاستزراع</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">إدارة وتعليم للمربين الصغار</p>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 overflow-y-auto p-4 custom-scrollbar" data-purpose="main-navigation">
+<ul class="space-y-2">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-brand-light text-white font-medium shadow-lg shadow-blue-500/20" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>أكاديمية الاستزراع</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>دليل الأمراض</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>سجل العمليات اليومي</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>مراقبة الأحواض (IoT)</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>حاسبة العلف</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- Sidebar Footer / Contact -->
+<div class="p-6 border-t border-slate-100 dark:border-slate-700 space-y-4">
+<p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">للتواصل والدعم</p>
+<div class="space-y-3">
+<a class="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400 hover:text-brand-light transition-colors" href="mailto:Hudaabass200@gmail.com">
+<div class="p-2 bg-slate-100 dark:bg-slate-700 rounded-lg">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<span class="truncate">Hudaabass200@gmail.com</span>
+</a>
+<a class="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400 hover:text-brand-light transition-colors" href="tel:01019547928">
+<div class="p-2 bg-slate-100 dark:bg-slate-700 rounded-lg">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<span>01019547928</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- END: Sidebar Navigation -->
+<!-- BEGIN: Main Content -->
+<main class="flex-1 mr-72 p-8 transition-all duration-300">
+<!-- BEGIN: Top Header -->
+<header class="flex justify-between items-center mb-12">
+<div data-purpose="header-text">
+<h2 class="text-3xl font-extrabold text-slate-800 dark:text-white">أكاديمية الاستزراع السمكي</h2>
+<p class="text-slate-500 dark:text-slate-400 mt-2">اختر نوع السمك لتتعلم أساسيات التربية والرعاية من الصفر.</p>
+</div>
+<div class="flex items-center gap-4">
+<!-- Theme Toggle Button -->
+<button class="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm text-slate-600 dark:text-yellow-400 hover:scale-105 transition-transform" data-purpose="dark-mode-toggle" id="theme-toggle">
+<svg class="hidden w-6 h-6" fill="currentColor" id="theme-toggle-dark-icon" viewbox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+<svg class="hidden w-6 h-6" fill="currentColor" id="theme-toggle-light-icon" viewbox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+</button>
+</div>
+</header>
+<!-- END: Top Header -->
+<!-- BEGIN: Content Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Card: Sea Bream -->
+<article class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-all duration-300 group" data-purpose="fish-card">
+<div class="relative h-64 overflow-hidden">
+<img alt="الدنيس" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAducWWob_GqjJB1x35f9tD-OJ97g3XhpEN27eETIObdVbcYMqAC7OoAvQTUi9NrjUMQmHfzuI7IxzxRfoEv6JU9wCmDQzYoPPGeMQQlwjvBY8ZhGpEB6rl0PT_2CLYRPkTv_z1a_JFFOukM8aRD_7lfuHQhTMk3do_uExib02B_vPC1HNvO8Kz3bOBzIAlisOz2ESRsQ5lZZcJ8NdoqceX_TgGltlCA0gxKsaPTPSXqNQVWoNK9lGi7t_dbFuoWahrySZKJOFdaTQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+<span class="text-white text-sm font-medium">مشاهدة التفاصيل الفنية</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex items-center justify-between mb-3">
+<h3 class="text-xl font-bold dark:text-white">الدنيس (Sea Bream)</h3>
+<span class="p-2 bg-blue-50 dark:bg-blue-900/30 rounded-lg">🐟</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
+              من أجود أنواع الأسماك البحرية في السوق المصري. تتطلب خبرة في التغذية وإدارة جودة المياه.
+            </p>
+<a class="inline-flex items-center gap-2 text-brand-light font-semibold hover:gap-4 transition-all" href="#">
+              اقرأ الدليل الكامل
+              <svg class="h-4 w-4 transform rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</a>
+</div>
+</article>
+<!-- Card: Sea Bass -->
+<article class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-all duration-300 group" data-purpose="fish-card">
+<div class="relative h-64 overflow-hidden">
+<img alt="القاروص" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5Niov7kLfBL8WBRaIDa3iyivMR2lF6vwDjMACZkbPNSYEFT6YyptFcoMa9P6rQkf0frx__IAB-r8d7oVjgvh1RNMbaILZmI-XgKrKjb-wKzLapLXvYTLbdqrBJEUr2XVO90d072oKKgl0YaaaYLEFCc4Zgbve_2NNKGYUpDqYsUJTFXKdsZdk6cGZ4LDIEnDPqOfJCrbw-rMnPYcbx39QhPYBbsoBYsJ-q4-0lRC7ucBYEb9vdng6q7nnH9RsRel2Z7ExAfLi5uo"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="bg-white/20 backdrop-blur-md text-white px-4 py-2 rounded-full border border-white/30 flex items-center gap-2">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+                 تغيير الصورة
+               </button>
+</div>
+</div>
+<div class="p-6">
+<div class="flex items-center justify-between mb-3">
+<h3 class="text-xl font-bold dark:text-white">القاروص (Sea Bass)</h3>
+<span class="p-2 bg-blue-50 dark:bg-blue-900/30 rounded-lg">🐟</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
+              سمكة بحرية ذات قيمة اقتصادية عالية. تحتاج إلى رعاية أكبر وجودة مياه ممتازة لضمان أفضل معدلات نمو.
+            </p>
+<a class="inline-flex items-center gap-2 text-brand-light font-semibold hover:gap-4 transition-all" href="#">
+              اقرأ الدليل الكامل
+              <svg class="h-4 w-4 transform rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</a>
+</div>
+</article>
+<!-- Card: Tilapia -->
+<article class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-all duration-300 group" data-purpose="fish-card">
+<div class="relative h-64 overflow-hidden">
+<img alt="البلطي" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDj8m2t-LcNvPF3-rjSCxzR5jGf7djDl1lfijN89NKzX-2L7hus5tx93HrGisGhAXuwht4ZybvYuQhdfO2MMG1_StfJ6peRT1ARfW6n6d_VpyXMe2JHtz4246lxM5g8CA0wkiScAV-DUdJAT-WHTcv9kw6hQmK419lKAju0l5ovFwiYi5_Q87Aa8SH9v7B1--A-QEAWUizZQ12QSP0c88ysIw9MmBA463JE79BKT7AG6igEXskA-Wp6N781lDqiUnp0DcEOHjycrPU"/>
+<div class="absolute top-4 left-4">
+<span class="bg-green-100 text-green-700 text-[10px] uppercase font-bold px-2 py-1 rounded-full">الأكثر شهرة</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex items-center justify-between mb-3">
+<h3 class="text-xl font-bold dark:text-white">البلطي (Tilapia)</h3>
+<span class="p-2 bg-blue-50 dark:bg-blue-900/30 rounded-lg">🐟</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
+              السمكة الأكثر شعبية في مصر. تتحمل الظروف القاسية وتنمو بسرعة، مثالية للمربين المبتدئين.
+            </p>
+<a class="inline-flex items-center gap-2 text-brand-light font-semibold hover:gap-4 transition-all" href="#">
+              اقرأ الدليل الكامل
+              <svg class="h-4 w-4 transform rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</a>
+</div>
+</article>
+</section>
+<!-- END: Content Grid -->
+<!-- BEGIN: Information Section -->
+<section class="mt-16 bg-blue-600 rounded-3xl p-10 text-white relative overflow-hidden" data-purpose="info-banner">
+<div class="relative z-10 max-w-2xl">
+<h2 class="text-3xl font-bold mb-4">هل تحتاج إلى استشارة متخصصة؟</h2>
+<p class="text-blue-100 mb-8 text-lg">يتوفر خبراؤنا للإجابة على جميع تساؤلاتكم الفنية حول إنشاء المزارع السمكية وإدارتها باحترافية.</p>
+<button class="bg-white text-blue-600 px-8 py-3 rounded-2xl font-bold hover:bg-blue-50 transition-colors">
+            تحدث مع خبير الآن
+          </button>
+</div>
+<!-- Decorative abstract shape -->
+<div class="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-500/30 rounded-full blur-3xl"></div>
+<div class="absolute top-12 right-12 w-24 h-24 bg-white/10 rounded-full border border-white/20"></div>
+</section>
+<!-- END: Information Section -->
+</main>
+<!-- END: Main Content -->
+</div>
+<!-- END: Layout Wrapper -->
+<!-- BEGIN: Scripts -->
+<script data-purpose="theme-handler">
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+    const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+    // On page load, set initial icons
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+        lightIcon.classList.remove('hidden');
+    } else {
+        document.documentElement.classList.remove('dark');
+        darkIcon.classList.remove('hidden');
+    }
+
+    themeToggleBtn.addEventListener('click', function() {
+        // Toggle icons
+        darkIcon.classList.toggle('hidden');
+        lightIcon.classList.toggle('hidden');
+
+        // Toggle theme class on html element
+        if (document.documentElement.classList.contains('dark')) {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('color-theme', 'light');
+        } else {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('color-theme', 'dark');
+        }
+    });
+  </script>
+<!-- END: Scripts -->
+</body></html>

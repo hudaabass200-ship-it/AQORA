@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Noto+Kufi+Arabic:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#004e5f",
+                        "on-surface-variant": "#3f484b",
+                        "on-secondary-fixed-variant": "#0e5138",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#edf1f1",
+                        "inverse-surface": "#2c3132",
+                        "tertiary-fixed-dim": "#8bd1e8",
+                        "primary-fixed": "#adecff",
+                        "surface-container-highest": "#dfe3e3",
+                        "on-primary-fixed": "#001f26",
+                        "surface-dim": "#d7dbdb",
+                        "surface": "#f6fafa",
+                        "on-primary-container": "#b9efff",
+                        "inverse-primary": "#80d2e9",
+                        "surface-container-high": "#e5e9e9",
+                        "outline-variant": "#bec8cc",
+                        "on-primary": "#ffffff",
+                        "secondary": "#2c694e",
+                        "error": "#ba1a1a",
+                        "tertiary": "#005769",
+                        "surface-bright": "#f6fafa",
+                        "surface-container-low": "#f0f4f4",
+                        "primary-fixed-dim": "#80d2e9",
+                        "secondary-container": "#aeeecb",
+                        "primary-container": "#007185",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#002114",
+                        "tertiary-fixed": "#b2ebff",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#181c1d",
+                        "error-container": "#ffdad6",
+                        "background": "#f6fafa",
+                        "primary": "#005767",
+                        "surface-container": "#ebefef",
+                        "secondary-fixed-dim": "#95d4b3",
+                        "on-tertiary-container": "#bfeeff",
+                        "on-error-container": "#93000a",
+                        "on-secondary-container": "#316e52",
+                        "surface-tint": "#00687a",
+                        "outline": "#6f797c",
+                        "on-primary-fixed-variant": "#004e5d",
+                        "tertiary-container": "#227084",
+                        "on-tertiary-fixed": "#001f27",
+                        "on-surface": "#181c1d",
+                        "surface-variant": "#dfe3e3",
+                        "secondary-fixed": "#b1f0ce"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Noto Kufi Arabic", "Manrope"],
+                        "body": ["Noto Kufi Arabic", "Manrope"],
+                        "label": ["Noto Kufi Arabic", "Manrope"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Noto Kufi Arabic', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-[#f6fafa] dark:bg-[#181c1d] tonal-shift bg-[#ebefef] dark:bg-[#1d2122] no-border">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden">
+<img alt="user_profile_picture" class="w-full h-full object-cover" data-alt="close-up portrait of a professional middle-eastern man in modern aquaculture research clothing, bright studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmqGJ_-fuDFVMqU1R6IU-XhNlarZJs9tUyUhk9u0ARdmVJ6XerDgLN4gxwDu2jMPXgb2C6uv-24OQJ8G20TINI5j25Z7qyzOQQPzGZK-cjKTN1xG3i28PkojhP7F-UchZwXziznshqvE1LfBO2Y0BZfuDNL9vhCBm9M7Py_QFf0T2jGya85TLOG5WJ1wfdz7_3gM-g-_KhjHbgyuLc0WbiDwDSqukYz4AH62Pkgfs0jpe1O3ELfnD9be0V8is9iXC1Szt0qLBvNmk"/>
+</div>
+<h1 class="text-[#005767] dark:text-[#007185] font-manrope text-lg font-bold tracking-tight">Aquatic Curator</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-[#ebefef] dark:hover:bg-[#2a2e2f] transition-colors scale-95 duration-150">
+<span class="material-symbols-outlined text-[#005767] dark:text-[#007185]">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-[#ebefef] dark:hover:bg-[#2a2e2f] transition-colors scale-95 duration-150 md:hidden">
+<span class="material-symbols-outlined text-[#005767] dark:text-[#007185]">menu</span>
+</button>
+</div>
+</header>
+<!-- Sidebar (Desktop) -->
+<aside class="hidden md:flex fixed right-0 top-0 h-full z-40 w-72 flex-col p-4 bg-[#f6fafa] dark:bg-[#181c1d] rounded-l-3xl shadow-2xl shadow-[#181c1d]/5 mt-16">
+<div class="py-6 px-4 border-b border-outline-variant/15 mb-4">
+<h2 class="text-[#005767] text-lg font-bold">دليل الأمراض</h2>
+<p class="text-xs text-[#404849]">الاستشاري الذكي لصحة الأحياء المائية</p>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-4 p-3 text-[#404849] dark:text-[#bfc8ca] hover:bg-[#ebefef] dark:hover:bg-[#2a2e2f] transition-all duration-300 rounded-xl" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-medium text-sm">Academy</span>
+</a>
+<a class="flex items-center gap-4 p-3 bg-[#007185]/10 text-[#005767] dark:text-[#007185] font-bold rounded-xl" href="#">
+<span class="material-symbols-outlined">medical_services</span>
+<span class="font-medium text-sm">Disease Guide</span>
+</a>
+<a class="flex items-center gap-4 p-3 text-[#404849] dark:text-[#bfc8ca] hover:bg-[#ebefef] dark:hover:bg-[#2a2e2f] transition-all duration-300 rounded-xl" href="#">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="font-medium text-sm">Daily Logs</span>
+</a>
+<a class="flex items-center gap-4 p-3 text-[#404849] dark:text-[#bfc8ca] hover:bg-[#ebefef] dark:hover:bg-[#2a2e2f] transition-all duration-300 rounded-xl" href="#">
+<span class="material-symbols-outlined">sensors</span>
+<span class="font-medium text-sm">IoT Monitoring</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content -->
+<main class="pt-24 pb-32 px-6 md:pr-80 max-w-7xl mx-auto">
+<!-- Hero Section / Search -->
+<section class="mb-12">
+<div class="relative rounded-3xl overflow-hidden h-64 flex items-center p-8 bg-primary-container">
+<img alt="Underwater Research" class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay" data-alt="underwater view of clean aquaculture tank with healthy fish swimming in crystal clear water, soft sunlight filtering from top" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7FZTW0cXVmtm6qB49EsafLT-A-YrnLC9nc7pv8I1wU473oq_Hr2QD5cKrvLehZqeS6qjGTmpaiC6dwzVVW6nxFtlaQaTUjGPqzxTC98PPa4DMO5Dxa-3MbB7rJrR0HYDULbRO4himy_2IpoMc--U9YSFLh2s0jlJtXh1wq4Sc3d21yxLeD3n-vzufe23z_hxKwlisF_3DTBQ-o5a1GlUJVdp33uPVAti4yofb0ILRG_iy8x0D1bnBF3L_8kDgaOeViQ8ZAu6mKNY"/>
+<div class="relative z-10 w-full max-w-2xl">
+<h2 class="text-3xl font-extrabold text-white mb-4 leading-tight">دليل التشخيص والوقاية الذكي</h2>
+<p class="text-primary-fixed mb-8 opacity-90 max-w-lg">استكشف قاعدة بيانات الأمراض المائية الأكثر شمولاً. تعرف على الأعراض، طرق العلاج، وبروتوكولات الوقاية لضمان سلامة قطيعك.</p>
+<div class="flex gap-2">
+<div class="flex-grow relative">
+<input class="w-full bg-white/90 backdrop-blur-md rounded-2xl py-4 pr-12 pl-4 border-none focus:ring-2 focus:ring-primary text-on-surface" placeholder="ابحث عن مرض أو عرض (مثال: بقع بيضاء)..." type="text"/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-primary">search</span>
+</div>
+<button class="bg-secondary-container text-on-secondary-container px-6 rounded-2xl font-bold flex items-center gap-2 hover:opacity-90 transition-all">
+<span class="material-symbols-outlined">psychology</span>
+<span>التشخيص بالذكاء الاصطناعي</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Grid: Featured Insight & Analysis -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-12">
+<!-- Analyzed Image Result -->
+<div class="lg:col-span-4 bg-surface-container rounded-3xl p-6 flex flex-col">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-primary font-bold">تحليل الحالة الحالية</h3>
+<span class="text-xs font-bold text-secondary bg-secondary-container/30 px-3 py-1 rounded-full">الحالة: تنبيه</span>
+</div>
+<div class="relative rounded-2xl overflow-hidden aspect-square mb-4">
+<img alt="Fish diagnostic analysis" class="w-full h-full object-cover" data-alt="scientific close-up of a tilapia fish showing signs of dermal infection with microscopic overlays indicating bacteria activity, clinical lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWMRzjvoWlSKAMt7i3VITxbtU78ymkNGRSX6Q1Pgf4t-qIvYEraNQLeoyHDKFgd4wxEESqtwBSnhX5loJbmvNgN25ALuh8fO3r1Ux-o62DDEFeznws4Nv8WAnV3iVPwYquKtgktVDWvOg9a5DvTtNQirTs-OdqDJp8cjcnRraVym4paTGRhIXqOYcu8H6FhWSrHlHQXUCuMioClVzPUlFsTzm-GhHH23gR1VRTYDgZusVYC1CRh5Ks00RY-OXcMMZ01mw8lkvRHbM"/>
+<div class="absolute inset-0 border-2 border-primary/40 rounded-2xl m-4 pointer-events-none"></div>
+<div class="absolute bottom-4 left-4 right-4 glass-card p-3 rounded-xl border border-white/20">
+<p class="text-[10px] text-on-surface/70 leading-tight">صورة المصدر: {{DATA:IMAGE:IMAGE_4}}</p>
+<p class="text-xs font-bold text-primary">تم رصد أعراض: Streptococcus</p>
+</div>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed mb-4">أظهر التحليل البصري وجود التهابات حول قاعدة الزعانف وجحوظاً طفيفاً في العين، مما قد يشير إلى إصابة مبكرة ببكتيريا المكورات العقدية.</p>
+<button class="mt-auto w-full py-3 bg-primary text-white rounded-xl font-bold hover:scale-[0.98] transition-transform">بدء بروتوكول العلاج</button>
+</div>
+<!-- Disease List -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<div class="flex items-end justify-between px-2">
+<h3 class="text-xl font-bold text-on-surface">الأمراض الشائعة</h3>
+<a class="text-sm text-primary font-bold hover:underline" href="#">عرض الكل</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Card 1: Streptococcosis -->
+<div class="bg-surface-container-lowest rounded-3xl p-6 flex items-start gap-4 shadow-sm hover:shadow-md transition-shadow">
+<div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-3xl">coronavirus</span>
+</div>
+<div>
+<h4 class="font-bold text-lg text-on-surface mb-1">المكورات العقدية (Streptococcosis)</h4>
+<p class="text-sm text-on-surface-variant line-clamp-2 leading-relaxed mb-3">مرض بكتيري خطير يسبب نزيفاً داخلياً وفقداناً للتوازن. ينتشر بسرعة في درجات الحرارة العالية.</p>
+<div class="flex gap-2">
+<span class="text-[10px] font-bold px-2 py-1 bg-error-container text-on-error-container rounded-md">خطر مرتفع</span>
+<span class="text-[10px] font-bold px-2 py-1 bg-surface-container-highest text-on-surface-variant rounded-md">بكتيري</span>
+</div>
+</div>
+</div>
+<!-- Card 2: Aeromonas -->
+<div class="bg-surface-container-lowest rounded-3xl p-6 flex items-start gap-4 shadow-sm hover:shadow-md transition-shadow">
+<div class="w-14 h-14 rounded-2xl bg-tertiary/10 flex items-center justify-center text-tertiary shrink-0">
+<span class="material-symbols-outlined text-3xl">bug_report</span>
+</div>
+<div>
+<h4 class="font-bold text-lg text-on-surface mb-1">الإيروموناس (Aeromonas)</h4>
+<p class="text-sm text-on-surface-variant line-clamp-2 leading-relaxed mb-3">تسبب تقرحات جلدية واستسقاء. ترتبط عادة بسوء جودة المياه وارتفاع مستويات الأمونيا.</p>
+<div class="flex gap-2">
+<span class="text-[10px] font-bold px-2 py-1 bg-orange-100 text-orange-700 rounded-md">خطر متوسط</span>
+<span class="text-[10px] font-bold px-2 py-1 bg-surface-container-highest text-on-surface-variant rounded-md">بيئي/بكتيري</span>
+</div>
+</div>
+</div>
+<!-- Card 3: Ichthyophthirius -->
+<div class="bg-surface-container-lowest rounded-3xl p-6 flex items-start gap-4 shadow-sm hover:shadow-md transition-shadow">
+<div class="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
+<span class="material-symbols-outlined text-3xl">grain</span>
+</div>
+<div>
+<h4 class="font-bold text-lg text-on-surface mb-1">النقاط البيضاء (Ich)</h4>
+<p class="text-sm text-on-surface-variant line-clamp-2 leading-relaxed mb-3">طفيليات تظهر كبقع ملحية على جلد السمكة. تسبب حكة شديدة وصعوبة في التنفس.</p>
+<div class="flex gap-2">
+<span class="text-[10px] font-bold px-2 py-1 bg-yellow-100 text-yellow-700 rounded-md">علاج متاح</span>
+<span class="text-[10px] font-bold px-2 py-1 bg-surface-container-highest text-on-surface-variant rounded-md">طفيلي</span>
+</div>
+</div>
+</div>
+<!-- Card 4: Columnaris -->
+<div class="bg-surface-container-lowest rounded-3xl p-6 flex items-start gap-4 shadow-sm hover:shadow-md transition-shadow">
+<div class="w-14 h-14 rounded-2xl bg-primary-container/10 flex items-center justify-center text-primary-container shrink-0">
+<span class="material-symbols-outlined text-3xl">texture</span>
+</div>
+<div>
+<h4 class="font-bold text-lg text-on-surface mb-1">كولوميناريس (Columnaris)</h4>
+<p class="text-sm text-on-surface-variant line-clamp-2 leading-relaxed mb-3">يُعرف بمرض "قطن الفم"، حيث تظهر بكتيريا تشبه القطن حول الفم والزعانف.</p>
+<div class="flex gap-2">
+<span class="text-[10px] font-bold px-2 py-1 bg-error-container text-on-error-container rounded-md">شديد العدوى</span>
+<span class="text-[10px] font-bold px-2 py-1 bg-surface-container-highest text-on-surface-variant rounded-md">بكتيري</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Preventative Care Section -->
+<section class="bg-white/40 backdrop-blur-lg rounded-[2.5rem] p-10 border border-white/20">
+<div class="flex flex-col md:flex-row items-center gap-12">
+<div class="md:w-1/2">
+<h3 class="text-2xl font-extrabold text-primary mb-6">بروتوكول الأمان الحيوي الأسبوعي</h3>
+<div class="space-y-6">
+<div class="flex gap-4">
+<span class="flex-shrink-0 w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-bold">١</span>
+<p class="text-on-surface-variant leading-relaxed">فحص جودة المياه يومياً مع التركيز على مستويات الأكسجين الذائب والأمونيا.</p>
+</div>
+<div class="flex gap-4">
+<span class="flex-shrink-0 w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-bold">٢</span>
+<p class="text-on-surface-variant leading-relaxed">تطهير جميع المعدات والشباك باستخدام محاليل معتمدة قبل الانتقال بين الأحواض.</p>
+</div>
+<div class="flex gap-4">
+<span class="flex-shrink-0 w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-bold">٣</span>
+<p class="text-on-surface-variant leading-relaxed">مراقبة سلوك التغذية؛ أي انخفاض مفاجئ في الشهية هو المؤشر الأول للمرض.</p>
+</div>
+</div>
+</div>
+<div class="md:w-1/2 grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-6 rounded-3xl flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary mb-3 text-4xl">water_drop</span>
+<span class="text-2xl font-bold text-on-surface">7.2 pH</span>
+<span class="text-xs text-on-surface-variant">مثالي للبلطي</span>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-3xl flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary mb-3 text-4xl">thermostat</span>
+<span class="text-2xl font-bold text-on-surface">28°C</span>
+<span class="text-xs text-on-surface-variant">حرارة مياه مستقرة</span>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-3xl flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary mb-3 text-4xl">air</span>
+<span class="text-2xl font-bold text-on-surface">6.5 mg/L</span>
+<span class="text-xs text-on-surface-variant">أكسجين ذائب آمن</span>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-3xl flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary mb-3 text-4xl">visibility</span>
+<span class="text-2xl font-bold text-on-surface">15cm</span>
+<span class="text-xs text-on-surface-variant">وضوح مياه منخفض</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#ffffff]/80 dark:bg-[#181c1d]/80 backdrop-blur-xl rounded-t-[2rem] shadow-[0_-8px_30px_rgb(0,0,0,0.04)] no-border">
+<a class="flex flex-col items-center justify-center text-[#707879] opacity-60 hover:opacity-100 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-manrope text-[10px] uppercase tracking-widest mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#707879] opacity-60 hover:opacity-100 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">waves</span>
+<span class="font-manrope text-[10px] uppercase tracking-widest mt-1">Monitoring</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#005767] dark:text-[#007185] scale-110 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="font-manrope text-[10px] uppercase tracking-widest mt-1">Logs</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#707879] opacity-60 hover:opacity-100 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-manrope text-[10px] uppercase tracking-widest mt-1">Assistant</span>
+</a>
+</nav>
+</body></html>

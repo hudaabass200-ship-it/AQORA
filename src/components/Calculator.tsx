@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "motion/react";
-import { Calculator as CalcIcon, Scale, Fish, Info, Thermometer } from "lucide-react";
+import { Calculator as CalcIcon, Scale, Fish, Info, Thermometer, TrendingUp, CheckCircle, Waves, Lightbulb } from "lucide-react";
 
 export default function Calculator() {
   const [fishType, setFishType] = useState("tilapia");
@@ -56,127 +56,143 @@ export default function Calculator() {
   const multiplier = getTempMultiplier(fishType, waterTemp);
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-slate-800 mb-2">حاسبة كميات العلف</h2>
-        <p className="text-slate-600">احسب كمية العلف اليومية المطلوبة بناءً على نوع السمك، العدد، متوسط الوزن، ودرجة حرارة المياه.</p>
-      </div>
+    <div className="space-y-8 max-w-4xl mx-auto pb-12">
+      {/* Hero Editorial Section */}
+      <section className="relative rounded-[2rem] overflow-hidden p-8 flex flex-col justify-end min-h-[240px] shadow-lg">
+        <div className="absolute inset-0 z-0">
+          <img 
+            className="w-full h-full object-cover" 
+            alt="water" 
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5tjfQSpqXE9ozY0SEnHiPWjseg6KL4FJxVWBbyw4xWGhFupg3JbhJtWtlnNTIDrO1BJvc9Hj4yUj2hRHjEDAXPbiCeK6vDbgvuHwyo9FcQGL47s9hGT3q_HqP9T-GyPiAuP2svIo4i_-OZWvJWF3jgqcbvhMeXD2L7w_6SNVNtKXhpnEZnfxwyarTMx9IKAdGXLTV8iPUngEf2OtLE1XMSjdExhzmukTOexEt2oFCwo-X3mXoNNu_XTUyXTszA7z6rn4EghtowXY" 
+            referrerPolicy="no-referrer"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent"></div>
+        </div>
+        <div className="relative z-10 space-y-2">
+          <span className="bg-secondary-container text-on-secondary-container px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">أداة المربي الذكي</span>
+          <h2 className="text-white text-4xl font-headline font-black leading-tight">حاسبة العلف</h2>
+          <p className="text-blue-50/90 max-w-md font-body">حدد بدقة احتياجات أسماكك الغذائية بناءً على معايير البيئة والنمو الحالية.</p>
+        </div>
+      </section>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Input Form */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6"
-        >
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">نوع السمك</label>
-            <div className="relative">
-              <Fish className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-              <select
-                value={fishType}
-                onChange={(e) => setFishType(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
-              >
-                <option value="tilapia">البلطي</option>
-                <option value="seabass">القاروص</option>
-                <option value="seabream">الدنيس</option>
-              </select>
+      {/* Calculation Result Area */}
+      <section className="bg-surface-container-low rounded-[2rem] p-8 relative overflow-hidden">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="flex-1 space-y-4">
+            <h3 className="text-on-surface-variant font-bold text-xl flex items-center gap-2">
+              <CalcIcon className="w-6 h-6 text-primary" />
+              كمية العلف الموصى بها
+            </h3>
+            <div className="flex items-baseline gap-2">
+              <span className="text-7xl font-headline font-black text-primary tracking-tighter">{feedResult.value}</span>
+              <span className="text-2xl font-bold text-primary-container">{feedResult.unit}</span>
+            </div>
+            <p className="text-on-surface-variant text-sm flex items-center gap-2">
+              <CheckCircle className="w-5 h-5 text-secondary" />
+              هذه الكمية محسوبة لنمو مثالي وصحة مستدامة للمياه.
+            </p>
+          </div>
+          
+          {/* Signature Component: Growth Wave Visual */}
+          <div className="w-full md:w-64 h-32 bg-gradient-to-br from-primary to-primary-container rounded-2xl relative overflow-hidden flex items-center justify-center">
+            <svg className="absolute bottom-0 w-full" preserveAspectRatio="none" viewBox="0 0 100 40">
+              <path d="M0 40 C 20 10, 40 35, 70 5, 100 25 L 100 40 L 0 40 Z" fill="rgba(255,255,255,0.2)"></path>
+              <path d="M0 40 C 30 20, 50 30, 80 15, 100 35 L 100 40 L 0 40 Z" fill="rgba(255,255,255,0.1)"></path>
+            </svg>
+            <div className="bg-white/80 backdrop-blur-md px-4 py-2 rounded-xl text-primary font-bold text-sm shadow-xl flex items-center gap-2">
+              <TrendingUp className="w-4 h-4" />
+              معدل التحويل: 1.2
             </div>
           </div>
+        </div>
+      </section>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">العدد الكلي للأسماك في الحوض</label>
-            <input
-              type="number"
-              min="0"
+      {/* Input Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Fish Type */}
+        <div className="space-y-3">
+          <label className="block text-on-surface font-bold pr-2">نوع السمك</label>
+          <div className="relative group">
+            <select 
+              value={fishType}
+              onChange={(e) => setFishType(e.target.value)}
+              className="w-full bg-surface-container-lowest border-none ring-0 focus:ring-2 focus:ring-primary/20 rounded-xl p-4 appearance-none font-body text-on-surface shadow-sm transition-all"
+            >
+              <option value="tilapia">بلطي نيلى</option>
+              <option value="seabass">قاروص</option>
+              <option value="seabream">دنيس</option>
+            </select>
+            <Fish className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+          </div>
+        </div>
+
+        {/* Temperature */}
+        <div className="space-y-3">
+          <label className="block text-on-surface font-bold pr-2">درجة حرارة الماء (°م)</label>
+          <div className="relative">
+            <input 
+              type="number" 
+              value={waterTemp}
+              onChange={(e) => setWaterTemp(e.target.value ? Number(e.target.value) : "")}
+              className="w-full bg-surface-container-lowest border-none ring-0 focus:ring-2 focus:ring-primary/20 rounded-xl p-4 font-body text-on-surface shadow-sm" 
+            />
+            <Thermometer className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+          </div>
+        </div>
+
+        {/* Fish Count */}
+        <div className="space-y-3">
+          <label className="block text-on-surface font-bold pr-2">عدد الأسماك</label>
+          <div className="relative">
+            <input 
+              type="number" 
+              placeholder="مثال: 500" 
               value={fishCount}
               onChange={(e) => setFishCount(e.target.value ? Number(e.target.value) : "")}
-              placeholder="مثال: 1000"
-              className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-surface-container-lowest border-none ring-0 focus:ring-2 focus:ring-primary/20 rounded-xl p-4 font-body text-on-surface shadow-sm" 
             />
+            <CalcIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
           </div>
+        </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">متوسط وزن السمكة الواحدة (بالجرام)</label>
-            <div className="relative">
-              <Scale className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-              <input
-                type="number"
-                min="0"
-                value={avgWeight}
-                onChange={(e) => setAvgWeight(e.target.value ? Number(e.target.value) : "")}
-                placeholder="مثال: 50"
-                className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
+        {/* Average Weight */}
+        <div className="space-y-3">
+          <label className="block text-on-surface font-bold pr-2">متوسط وزن السمكة (جرام)</label>
+          <div className="relative">
+            <input 
+              type="number" 
+              placeholder="مثال: 150" 
+              value={avgWeight}
+              onChange={(e) => setAvgWeight(e.target.value ? Number(e.target.value) : "")}
+              className="w-full bg-surface-container-lowest border-none ring-0 focus:ring-2 focus:ring-primary/20 rounded-xl p-4 font-body text-on-surface shadow-sm" 
+            />
+            <Scale className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
           </div>
-
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="block text-sm font-medium text-slate-700">درجة حرارة المياه الحالية (°C)</label>
-              <div className="group relative cursor-help">
-                <Info className="w-4 h-4 text-slate-400 hover:text-blue-500 transition-colors" />
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-slate-800 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10 text-right shadow-xl">
-                  تؤثر درجة الحرارة بشكل مباشر على شهية الأسماك وعملية الأيض. في درجات الحرارة المنخفضة أو المرتفعة جداً، يقل استهلاك العلف، لذا تقوم الحاسبة بتعديل الكمية تلقائياً لتجنب تلوث المياه وهدر العلف.
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800"></div>
-                </div>
-              </div>
-            </div>
-            <div className="relative">
-              <Thermometer className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-              <input
-                type="number"
-                min="0"
-                max="45"
-                value={waterTemp}
-                onChange={(e) => setWaterTemp(e.target.value ? Number(e.target.value) : "")}
-                placeholder="مثال: 26"
-                className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Result Card */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="bg-blue-600 p-8 rounded-2xl shadow-lg text-white flex flex-col justify-center items-center text-center relative overflow-hidden"
-        >
-          <div className="absolute -right-6 -top-6 opacity-10">
-            <CalcIcon className="w-48 h-48" />
-          </div>
-          
-          <h3 className="text-xl font-medium text-blue-100 mb-2 relative z-10">كمية العلف اليومية المقترحة</h3>
-          
-          {multiplier === 0 && waterTemp !== "" ? (
-            <div className="my-6 relative z-10 bg-red-500/20 border border-red-400/50 p-4 rounded-xl">
-              <p className="text-lg font-bold text-white">توقف عن التغذية!</p>
-              <p className="text-sm text-red-100 mt-1">درجة الحرارة الحالية غير مناسبة لتقديم العلف لهذا النوع من الأسماك.</p>
-            </div>
-          ) : (
-            <div className="text-6xl font-bold my-4 relative z-10 flex items-baseline gap-2">
-              {feedResult.value}
-              <span className="text-2xl font-normal text-blue-200">{feedResult.unit}</span>
-            </div>
-          )}
-          
-          <div className="mt-6 bg-blue-700/50 p-4 rounded-xl flex items-start gap-3 relative z-10 text-right w-full">
-            <Info className="w-6 h-6 text-blue-300 flex-shrink-0 mt-0.5" />
-            <div className="text-sm text-blue-100 leading-relaxed">
-              <p>
-                النسبة الأساسية: {(feedRates[fishType as keyof typeof feedRates] * 100).toFixed(1)}% من وزن الكتلة الحية.
-              </p>
-              {waterTemp !== "" && multiplier > 0 && multiplier < 1 && (
-                <p className="mt-1 text-orange-200 font-medium">
-                  تم تقليل الكمية بنسبة {Math.round((1 - multiplier) * 100)}% لتناسب درجة حرارة المياه الحالية ({waterTemp}°C).
-                </p>
-              )}
-            </div>
-          </div>
-        </motion.div>
+        </div>
       </div>
+
+      {/* Editorial Tips Bento Grid */}
+      <section className="space-y-4">
+        <h3 className="font-headline font-black text-2xl text-on-surface-variant">توصيات الموجه الذكي</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="col-span-1 md:col-span-2 bg-secondary/5 rounded-3xl p-6 flex flex-col justify-between border-r-4 border-secondary">
+            <p className="text-secondary font-bold text-lg leading-snug">
+              {waterTemp !== "" && Number(waterTemp) > 26 
+                ? `في درجة حرارة ${waterTemp}°م، تزيد معدلات التمثيل الغذائي. يفضل تقسيم الوجبة إلى 3 حصص يومياً.`
+                : "تأكد من توزيع العلف بالتساوي على مساحة الحوض لضمان حصول جميع الأسماك على حصتها."}
+            </p>
+            <div className="mt-4 flex items-center gap-2 text-secondary-container bg-secondary px-3 py-1 rounded-full self-start text-xs font-bold">
+              <Info className="w-4 h-4" />
+              نصيحة الخبير
+            </div>
+          </div>
+          <div className="bg-surface-container-high rounded-3xl p-6 space-y-4">
+            <Waves className="w-10 h-10 text-tertiary" />
+            <h4 className="font-bold text-on-surface">جودة المياه</h4>
+            <p className="text-on-surface-variant text-sm">تأكد من مستوى الأكسجين المذاب بعد عملية الإطعام بساعتين.</p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

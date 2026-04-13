@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, Type } from "@google/genai";
 
 export const getApiKey = () => {
   return process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY2 || process.env.GEMINI_API_KEY3 || "";
@@ -34,10 +34,10 @@ export const FISH_FARMING_TOOLS = [
         name: "getFishSpeciesInfo",
         description: "Fetch real-time data about fish species (nutrition, environment, etc.) from FishWatch API.",
         parameters: {
-          type: "OBJECT",
+          type: Type.OBJECT,
           properties: {
             speciesName: {
-              type: "STRING",
+              type: Type.STRING,
               description: "The name of the fish species in English (e.g., 'tilapia', 'sea bass', 'sea bream')."
             }
           },
@@ -48,7 +48,7 @@ export const FISH_FARMING_TOOLS = [
         name: "getEgyptAquacultureProduction",
         description: "Fetch real-time aquaculture production statistics for Egypt from the World Bank API.",
         parameters: {
-          type: "OBJECT",
+          type: Type.OBJECT,
           properties: {},
         }
       },
@@ -56,10 +56,10 @@ export const FISH_FARMING_TOOLS = [
         name: "getFishTaxonomy",
         description: "Fetch scientific taxonomy and species data from Fish Species API.",
         parameters: {
-          type: "OBJECT",
+          type: Type.OBJECT,
           properties: {
             speciesName: {
-              type: "STRING",
+              type: Type.STRING,
               description: "The name of the fish species in English."
             }
           },

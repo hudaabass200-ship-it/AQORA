@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Newspaper, Loader2, AlertCircle, ChevronDown, Droplets, Wheat, Stethoscope, Lightbulb } from "lucide-react";
+import { Newspaper, Loader2, AlertCircle, ChevronDown, Droplets, Wheat, Stethoscope, Lightbulb, ChevronLeft } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { motion, AnimatePresence } from "motion/react";
 import { getAIClient, FISH_FARMING_SYSTEM_INSTRUCTION } from "../lib/ai";
@@ -36,19 +36,15 @@ export default function LatestUpdates() {
   const [categoryData, setCategoryData] = useState<Record<string, { content: string, isLoading: boolean, error: string }>>({});
 
   const handleToggle = async (id: string, prompt: string) => {
-    // Toggle close if already open
     if (openCategory === id) {
       setOpenCategory(null);
       return;
     }
     
-    // Open the selected category
     setOpenCategory(id);
 
-    // If data is already fetched or currently fetching, do nothing more
     if (categoryData[id]?.content || categoryData[id]?.isLoading) return;
 
-    // Set loading state
     setCategoryData(prev => ({ ...prev, [id]: { content: "", isLoading: true, error: "" } }));
 
     const ai = getAIClient();
@@ -82,17 +78,37 @@ export default function LatestUpdates() {
     }
   };
 
+  const getCategoryColor = (id: string) => {
+    switch (id) {
+      case 'water': return 'bg-blue-50 text-primary';
+      case 'feed': return 'bg-secondary-container/20 text-secondary';
+      case 'disease': return 'bg-error-container/30 text-error';
+      case 'breeding': return 'bg-tertiary-fixed text-primary';
+      default: return 'bg-primary-container text-on-primary-container';
+    }
+  };
+
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-2">
-          <Newspaper className="w-6 h-6 text-blue-600" />
-          أحدث التطورات في الاستزراع
-        </h2>
-        <p className="text-slate-600">
-          اختر القسم الذي تود قراءته للتعرف على أحدث التقنيات والأخبار العالمية والمحلية بضغطة زر.
-        </p>
-      </div>
+    <div className="space-y-8 max-w-4xl mx-auto pb-12">
+      {/* Hero Section: Editorial Style */}
+      <section className="relative overflow-hidden rounded-[2rem] bg-surface-container-low p-6 md:p-8">
+        <div className="relative z-10 max-w-[80%]">
+          <span className="inline-block px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-xs font-bold mb-3 tracking-wide">جديد اليوم</span>
+          <h2 className="text-3xl font-headline font-extrabold text-on-surface mb-2 leading-tight">أحدث التطورات</h2>
+          <p className="text-tertiary text-sm md:text-base leading-relaxed mb-4">
+            اختر القسم الذي تود قراءته للتعرف على أحدث التقنيات والأخبار العالمية والمحلية بضغطة زر.
+          </p>
+        </div>
+        <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-primary/10 rounded-full blur-3xl"></div>
+        <div className="absolute right-0 top-0 w-full h-full opacity-20 pointer-events-none">
+          <img 
+            alt="Background Texture" 
+            className="w-full h-full object-cover" 
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRnjJ9eBh20WKWbZ1WLRpd8P2E6ZWSL30KztYtDUBxGZR8XTKxizQemxIXaGW2Zyh_020wtOw7QUeqKnxSCW0bzv-8X28ycDYfRKu_YrSnq_pnN7uVeqsaEo8x8ffdoh9KgeGCUbywTnsuZSRVXhsIsuyfOjoI54HWuxn2dgtLvcJHZSDZRfLKqp8NRFxz-cdsdhOYuBMw9mJATL9TdnYocQtaDpXOnFM76lhkqE_sXxrGP1sugqoCtxzvjozTCkyC74E1ZC9vQyw"
+            referrerPolicy="no-referrer"
+          />
+        </div>
+      </section>
 
       <div className="space-y-4">
         {CATEGORIES.map((cat) => {
@@ -101,18 +117,25 @@ export default function LatestUpdates() {
           const data = categoryData[cat.id];
 
           return (
-            <div key={cat.id} className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <div key={cat.id} className="bg-surface-container-lowest rounded-2xl editorial-shadow overflow-hidden group">
               <button
                 onClick={() => handleToggle(cat.id, cat.prompt)}
-                className="w-full px-6 py-5 flex items-center justify-between hover:bg-slate-50 transition-colors focus:outline-none"
+                className="w-full p-5 flex items-center justify-between hover:bg-surface-container-low/50 transition-colors focus:outline-none"
               >
                 <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${isOpen ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-600'}`}>
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110 ${getCategoryColor(cat.id)}`}>
                     <Icon className="w-6 h-6" />
                   </div>
-                  <h3 className="text-lg font-bold text-slate-800">{cat.title}</h3>
+                  <div className="text-right">
+                    <h3 className="font-bold text-on-surface">{cat.title}</h3>
+                    <p className="text-xs text-tertiary">انقر للقراءة</p>
+                  </div>
                 </div>
-                <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                {isOpen ? (
+                  <ChevronDown className="w-5 h-5 text-outline-variant" />
+                ) : (
+                  <ChevronLeft className="w-5 h-5 text-outline-variant rtl:-scale-x-100" />
+                )}
               </button>
 
               <AnimatePresence>
@@ -124,19 +147,19 @@ export default function LatestUpdates() {
                     transition={{ duration: 0.3, ease: "easeInOut" }}
                     className="overflow-hidden"
                   >
-                    <div className="p-6 md:p-8 border-t border-slate-100 bg-slate-50/50">
+                    <div className="p-6 md:p-8 border-t border-outline-variant/10 bg-surface-container-low/30">
                       {data?.isLoading ? (
                         <div className="flex flex-col items-center justify-center py-8">
-                          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mb-4" />
-                          <p className="text-slate-500 font-medium animate-pulse">جاري جلب أحدث المعلومات...</p>
+                          <Loader2 className="w-8 h-8 animate-spin text-primary mb-4" />
+                          <p className="text-tertiary font-medium animate-pulse font-body">جاري جلب أحدث المعلومات...</p>
                         </div>
                       ) : data?.error ? (
-                        <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl flex items-start gap-3">
+                        <div className="bg-error-container/30 border border-error/20 text-error p-4 rounded-xl flex items-start gap-3">
                           <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                          <p>{data.error}</p>
+                          <p className="font-body text-sm">{data.error}</p>
                         </div>
                       ) : data?.content ? (
-                        <div className="prose prose-slate prose-blue max-w-none prose-headings:font-bold prose-headings:text-slate-800 prose-a:text-blue-600 prose-li:marker:text-blue-500" dir="rtl">
+                        <div className="prose prose-slate prose-blue max-w-none prose-headings:font-headline prose-headings:font-bold prose-headings:text-on-surface prose-p:font-body prose-p:text-on-surface-variant prose-a:text-primary prose-li:marker:text-primary" dir="rtl">
                           <ReactMarkdown>{data.content}</ReactMarkdown>
                         </div>
                       ) : null}

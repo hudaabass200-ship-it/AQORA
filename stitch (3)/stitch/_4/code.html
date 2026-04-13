@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html class="dark" dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#004e5f",
+                        "on-surface-variant": "#3f484b",
+                        "on-secondary-fixed-variant": "#0e5138",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#edf1f1",
+                        "inverse-surface": "#2c3132",
+                        "tertiary-fixed-dim": "#8bd1e8",
+                        "primary-fixed": "#adecff",
+                        "surface-container-highest": "#dfe3e3",
+                        "on-primary-fixed": "#001f26",
+                        "surface-dim": "#d7dbdb",
+                        "surface": "#f6fafa",
+                        "on-primary-container": "#b9efff",
+                        "inverse-primary": "#80d2e9",
+                        "surface-container-high": "#e5e9e9",
+                        "outline-variant": "#bec8cc",
+                        "on-primary": "#ffffff",
+                        "secondary": "#2c694e",
+                        "error": "#ba1a1a",
+                        "tertiary": "#005769",
+                        "surface-bright": "#f6fafa",
+                        "surface-container-low": "#f0f4f4",
+                        "primary-fixed-dim": "#80d2e9",
+                        "secondary-container": "#aeeecb",
+                        "primary-container": "#007185",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#002114",
+                        "tertiary-fixed": "#b2ebff",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#181c1d",
+                        "error-container": "#ffdad6",
+                        "background": "#181c1d",
+                        "primary": "#005767",
+                        "surface-container": "#1d2122",
+                        "secondary-fixed-dim": "#95d4b3",
+                        "on-tertiary-container": "#bfeeff",
+                        "on-error-container": "#93000a",
+                        "on-secondary-container": "#316e52",
+                        "surface-tint": "#00687a",
+                        "outline": "#6f797c",
+                        "on-primary-fixed-variant": "#004e5d",
+                        "tertiary-container": "#227084",
+                        "on-tertiary-fixed": "#001f27",
+                        "on-surface": "#ffffff",
+                        "surface-variant": "#3f484b",
+                        "secondary-fixed": "#b1f0ce"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Manrope', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[#181c1d] text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-[#181c1d] no-border tonal-shift">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="close-up profile portrait of a professional man in a dark studio setting with soft side lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBncYjGfIh7I2MdEdyIfuUwZFmVGkmwPb7aUiL4yal0iRCBgwY6FVAEYGwWEDr9QHQ6objdLt3QRAkxjI5HufPvh6uA2yNzpQB1W729TUhvULDJ8d4P_uRbc3oeBMruqlsZbNmW0p_XcT803ML40m1yCO4sogpuBju5VJTKP2Wv8ZbohRcpflNxSIyfYZT-L0hiFyPT7b1qnEbKDXh8iNretotwKHY7NFvxNkhd1jIOqXAc1f6dD57hPS3CNLYASiF_ceLoOMqdjsQ"/>
+</div>
+<span class="text-xl font-extrabold text-[#007185] tracking-tight">Aquatic Curator</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-[#007185] hover:bg-[#2a2e2f] transition-colors p-2 rounded-full">notifications</button>
+</div>
+</header>
+<!-- NavigationDrawer (Visible on desktop) -->
+<aside class="fixed right-0 top-0 h-full z-40 hidden md:flex flex-col p-4 w-72 bg-[#181c1d] shadow-2xl shadow-[#181c1d]/5 pt-20">
+<div class="flex flex-col gap-2">
+<div class="px-4 py-3 mb-6">
+<p class="text-lg font-bold text-[#007185]">Pond Manager</p>
+<p class="text-xs text-[#bfc8ca]">Beginner Level</p>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-[#bfc8ca] hover:bg-[#2a2e2f] rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="text-sm font-medium">Academy</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#bfc8ca] hover:bg-[#2a2e2f] rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">medical_services</span>
+<span class="text-sm font-medium">Disease Guide</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-[#007185]/10 text-[#007185] font-bold rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">sensors</span>
+<span class="text-sm font-medium">IoT Monitoring</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#bfc8ca] hover:bg-[#2a2e2f] rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">calculate</span>
+<span class="text-sm font-medium">Feed Calculator</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#bfc8ca] hover:bg-[#2a2e2f] rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">newspaper</span>
+<span class="text-sm font-medium">News</span>
+</a>
+</nav>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="md:mr-72 pt-20 pb-28 px-6 min-h-screen">
+<!-- Header Editorial Section -->
+<section class="mb-10">
+<h1 class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight text-on-surface">مراقبة الأحواض الذكية</h1>
+<p class="text-[#bfc8ca] text-lg max-w-2xl leading-relaxed">بيانات مباشرة من المستشعرات المغمورة لتحسين جودة المياه وزيادة الإنتاجية السمكية بدقة عالية.</p>
+</section>
+<!-- Bento Grid Dashboard -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Main Gauge: pH Level -->
+<div class="md:col-span-2 bg-surface-container rounded-3xl p-8 relative overflow-hidden flex flex-col justify-between min-h-[400px]">
+<div class="flex justify-between items-start z-10">
+<div>
+<h2 class="text-2xl font-bold mb-1">مستوى القلوية (pH)</h2>
+<span class="text-sm text-[#bfc8ca] uppercase tracking-widest">تحديث مباشر • حوض تيلابيا 1</span>
+</div>
+<div class="bg-secondary-container/20 text-secondary-fixed px-4 py-1 rounded-full text-xs font-bold backdrop-blur-md">
+                        مستقر
+                    </div>
+</div>
+<!-- Abstract Gauge Visualization -->
+<div class="flex justify-center items-center py-10 relative">
+<div class="w-64 h-64 rounded-full border-[16px] border-[#2a2e2f] flex items-center justify-center relative">
+<div class="absolute inset-0 rounded-full border-[16px] border-primary-container border-t-transparent -rotate-45"></div>
+<div class="text-center">
+<span class="text-7xl font-extrabold block">7.2</span>
+<span class="text-sm uppercase text-[#bfc8ca] tracking-widest">pH Units</span>
+</div>
+</div>
+<!-- Decorative Gradient -->
+<div class="absolute -bottom-20 -right-20 w-64 h-64 bg-primary/20 rounded-full blur-[80px]"></div>
+</div>
+<div class="flex gap-8 z-10">
+<div>
+<p class="text-[#bfc8ca] text-xs mb-1">الأدنى اليوم</p>
+<p class="text-xl font-bold">6.8</p>
+</div>
+<div>
+<p class="text-[#bfc8ca] text-xs mb-1">الأقصى اليوم</p>
+<p class="text-xl font-bold">7.5</p>
+</div>
+</div>
+</div>
+<!-- Side Card: Temperature -->
+<div class="bg-surface-container-high rounded-3xl p-8 flex flex-col justify-between overflow-hidden relative">
+<div>
+<div class="flex justify-between items-center mb-6">
+<span class="material-symbols-outlined text-tertiary-fixed text-4xl">thermostat</span>
+<div class="w-12 h-1 bg-tertiary-fixed rounded-full"></div>
+</div>
+<h3 class="text-xl font-bold mb-1">درجة الحرارة</h3>
+<p class="text-[#bfc8ca] text-sm mb-6">متوسط حرارة المياه</p>
+<div class="text-5xl font-extrabold mb-2">26.4°<span class="text-2xl font-medium">C</span></div>
+</div>
+<div class="space-y-4">
+<div class="h-2 bg-[#2a2e2f] rounded-full overflow-hidden">
+<div class="h-full w-[80%] bg-gradient-to-l from-primary to-primary-container"></div>
+</div>
+<div class="flex justify-between text-xs text-[#bfc8ca]">
+<span>منخفض (18°)</span>
+<span>مرتفع (32°)</span>
+</div>
+</div>
+</div>
+<!-- Line Chart: Dissolved Oxygen -->
+<div class="md:col-span-3 bg-surface-container rounded-3xl p-8">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+<div>
+<h2 class="text-2xl font-bold mb-1">الأكسجين المذاب (DO)</h2>
+<p class="text-[#bfc8ca] text-sm">معدل تشبع الأكسجين خلال الـ 24 ساعة الماضية</p>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 rounded-xl bg-surface-container-highest text-sm font-medium">ساعة</button>
+<button class="px-4 py-2 rounded-xl bg-primary-container text-white text-sm font-medium">يوم</button>
+<button class="px-4 py-2 rounded-xl bg-surface-container-highest text-sm font-medium">أسبوع</button>
+</div>
+</div>
+<!-- Mockup Line Chart -->
+<div class="h-64 flex items-end gap-1 w-full relative">
+<!-- Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between opacity-10">
+<div class="w-full h-px bg-white"></div>
+<div class="w-full h-px bg-white"></div>
+<div class="w-full h-px bg-white"></div>
+<div class="w-full h-px bg-white"></div>
+</div>
+<div class="flex-1 h-[40%] bg-primary/20 rounded-t-lg border-t-2 border-primary-container transition-all hover:h-[50%]"></div>
+<div class="flex-1 h-[45%] bg-primary/20 rounded-t-lg border-t-2 border-primary-container"></div>
+<div class="flex-1 h-[60%] bg-primary/20 rounded-t-lg border-t-2 border-primary-container"></div>
+<div class="flex-1 h-[55%] bg-primary/20 rounded-t-lg border-t-2 border-primary-container"></div>
+<div class="flex-1 h-[70%] bg-primary/20 rounded-t-lg border-t-2 border-primary-container"></div>
+<div class="flex-1 h-[65%] bg-primary/20 rounded-t-lg border-t-2 border-primary-container"></div>
+<div class="flex-1 h-[80%] bg-primary/20 rounded-t-lg border-t-2 border-primary-container"></div>
+<div class="flex-1 h-[75%] bg-primary/20 rounded-t-lg border-t-2 border-primary-container"></div>
+<div class="flex-1 h-[60%] bg-primary/20 rounded-t-lg border-t-2 border-primary-container"></div>
+<div class="flex-1 h-[50%] bg-primary/20 rounded-t-lg border-t-2 border-primary-container"></div>
+<div class="flex-1 h-[40%] bg-primary/20 rounded-t-lg border-t-2 border-primary-container"></div>
+<div class="flex-1 h-[35%] bg-primary/20 rounded-t-lg border-t-2 border-primary-container"></div>
+</div>
+<div class="flex justify-between mt-4 text-[#bfc8ca] text-xs">
+<span>12:00 ص</span>
+<span>06:00 ص</span>
+<span>12:00 م</span>
+<span>06:00 م</span>
+<span>11:59 م</span>
+</div>
+</div>
+<!-- Alerts / Action Cards -->
+<div class="bg-surface-container rounded-3xl p-6 flex items-center gap-4 hover:bg-[#2a2e2f] transition-all cursor-pointer">
+<div class="w-14 h-14 rounded-2xl bg-error/20 flex items-center justify-center text-error">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div>
+<h4 class="font-bold">تنبيهات النظام</h4>
+<p class="text-xs text-[#bfc8ca]">تم اكتشاف انخفاض في الملوحة</p>
+</div>
+<span class="material-symbols-outlined mr-auto text-[#bfc8ca]">chevron_left</span>
+</div>
+<div class="bg-surface-container rounded-3xl p-6 flex items-center gap-4 hover:bg-[#2a2e2f] transition-all cursor-pointer">
+<div class="w-14 h-14 rounded-2xl bg-secondary/20 flex items-center justify-center text-secondary-fixed">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">water_drop</span>
+</div>
+<div>
+<h4 class="font-bold">حالة التبديل</h4>
+<p class="text-xs text-[#bfc8ca]">تبديل المياه التلقائي نشط</p>
+</div>
+<span class="material-symbols-outlined mr-auto text-[#bfc8ca]">chevron_left</span>
+</div>
+<div class="bg-surface-container rounded-3xl p-6 flex items-center gap-4 hover:bg-[#2a2e2f] transition-all cursor-pointer">
+<div class="w-14 h-14 rounded-2xl bg-tertiary/20 flex items-center justify-center text-tertiary-fixed">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div>
+<h4 class="font-bold">استهلاك الطاقة</h4>
+<p class="text-xs text-[#bfc8ca]">المستشعرات تعمل بكفاءة 98%</p>
+</div>
+<span class="material-symbols-outlined mr-auto text-[#bfc8ca]">chevron_left</span>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Visible on mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#181c1d]/80 backdrop-blur-xl shadow-[0_-8px_30px_rgb(0,0,0,0.04)] rounded-t-[2rem]">
+<a class="flex flex-col items-center justify-center text-[#707879] opacity-60" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] uppercase tracking-widest mt-1">الرئيسية</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#007185] scale-110" href="#">
+<span class="material-symbols-outlined">waves</span>
+<span class="text-[10px] uppercase tracking-widest mt-1">المراقبة</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#707879] opacity-60" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="text-[10px] uppercase tracking-widest mt-1">السجلات</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#707879] opacity-60" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="text-[10px] uppercase tracking-widest mt-1">المساعد</span>
+</a>
+</nav>
+<!-- Floating Action Button - Contextual for Home/Monitoring -->
+<button class="fixed bottom-24 left-6 md:bottom-10 md:left-10 w-16 h-16 rounded-full bg-gradient-to-tr from-primary to-primary-container text-white shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-transform z-40">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</body></html>

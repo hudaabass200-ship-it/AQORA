@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Bot, User, Loader2 } from "lucide-react";
+import { Send, Bot, User, Loader2, Image as ImageIcon, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { getAIClient, FISH_FARMING_SYSTEM_INSTRUCTION, FISH_FARMING_TOOLS } from "../lib/ai";
 import { getEgyptAquacultureProduction, getFishSpeciesInfo, getFishTaxonomy } from "../lib/api-tools";
@@ -20,7 +20,26 @@ export default function AIChat() {
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const clearImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -31,11 +50,18 @@ export default function AIChat() {
   }, [messages]);
 
   const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+    if ((!input.trim() && !imageFile) || isLoading) return;
 
     const userMsg = input.trim();
     setInput("");
-    setMessages((prev) => [...prev, { id: Date.now().toString(), role: "user", content: userMsg }]);
+    
+    // Add user message to UI
+    const newUserMsg: Message = { 
+      id: Date.now().toString(), 
+      role: "user", 
+      content: userMsg + (imageFile ? "\n[صورة مرفقة]" : "") 
+    };
+    setMessages((prev) => [...prev, newUserMsg]);
     
     const ai = getAIClient();
 
@@ -56,7 +82,25 @@ export default function AIChat() {
         role: m.role,
         parts: [{ text: m.content }]
       }));
-      currentHistory.push({ role: "user", parts: [{ text: userMsg }] });
+      
+      const userParts: any[] = [];
+      if (userMsg) userParts.push({ text: userMsg });
+      if (!userMsg && imageFile) userParts.push({ text: "ما رأيك في هذه الصورة؟" });
+      
+      if (imageFile && imagePreview) {
+        const base64Data = imagePreview.split(',')[1];
+        userParts.push({
+          inlineData: {
+            data: base64Data,
+            mimeType: imageFile.type
+          }
+        });
+      }
+      
+      currentHistory.push({ role: "user", parts: userParts });
+      
+      // Clear image after sending
+      clearImage();
 
       let response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
@@ -119,18 +163,18 @@ export default function AIChat() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-8rem)] bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-      <div className="bg-slate-800 p-4 flex items-center text-white">
-        <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center ml-3">
-          <Bot className="w-6 h-6 text-white" />
+    <div className="flex flex-col h-[calc(100vh-8rem)] bg-surface rounded-3xl shadow-sm border border-outline-variant/15 overflow-hidden">
+      <div className="bg-surface/70 backdrop-blur-md p-4 flex items-center border-b border-outline-variant/15 z-10">
+        <div className="w-10 h-10 bg-primary-container rounded-full flex items-center justify-center ml-3">
+          <Bot className="w-6 h-6 text-on-primary-container" />
         </div>
         <div>
-          <h2 className="font-bold text-lg">المستشار الذكي</h2>
-          <p className="text-slate-300 text-sm">مدعوم بتقنية Gemini AI</p>
+          <h2 className="font-headline font-bold text-lg text-on-surface">المستشار الذكي</h2>
+          <p className="text-tertiary text-sm">مدعوم بتقنية Gemini AI</p>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 bg-slate-50">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 bg-background">
         <AnimatePresence initial={false}>
           {messages.map((msg) => (
             <motion.div
@@ -140,17 +184,17 @@ export default function AIChat() {
               className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
             >
               <div className={`flex max-w-[85%] md:max-w-[75%] ${msg.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
-                <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${msg.role === "user" ? "bg-blue-600 mr-3" : "bg-slate-800 ml-3"}`}>
-                  {msg.role === "user" ? <User className="w-5 h-5 text-white" /> : <Bot className="w-5 h-5 text-white" />}
+                <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${msg.role === "user" ? "bg-primary mr-3" : "bg-surface-container-highest ml-3"}`}>
+                  {msg.role === "user" ? <User className="w-5 h-5 text-on-primary" /> : <Bot className="w-5 h-5 text-tertiary" />}
                 </div>
                 <div
-                  className={`p-4 rounded-2xl ${
+                  className={`p-4 ${
                     msg.role === "user"
-                      ? "bg-blue-600 text-white rounded-tl-none"
-                      : "bg-white text-slate-800 shadow-sm border border-slate-100 rounded-tr-none"
+                      ? "bg-primary text-on-primary rounded-[1.5rem] rounded-br-sm"
+                      : "bg-surface-container-high text-on-surface rounded-[1.5rem] rounded-tr-sm border-r-4 border-tertiary-fixed"
                   }`}
                 >
-                  <p className="whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+                  <p className="whitespace-pre-wrap leading-relaxed font-body text-sm md:text-base">{msg.content}</p>
                 </div>
               </div>
             </motion.div>
@@ -159,12 +203,12 @@ export default function AIChat() {
         {isLoading && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
             <div className="flex max-w-[85%] flex-row">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-800 ml-3 flex items-center justify-center">
-                <Bot className="w-5 h-5 text-white" />
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-surface-container-highest ml-3 flex items-center justify-center">
+                <Bot className="w-5 h-5 text-tertiary" />
               </div>
-              <div className="p-4 rounded-2xl bg-white text-slate-800 shadow-sm border border-slate-100 rounded-tr-none flex items-center gap-2">
-                <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
-                <span className="text-slate-500">جاري التفكير...</span>
+              <div className="p-4 rounded-[1.5rem] rounded-tr-sm bg-surface-container-high text-on-surface border-r-4 border-tertiary-fixed flex items-center gap-2">
+                <Loader2 className="w-5 h-5 animate-spin text-primary" />
+                <span className="text-tertiary text-sm font-body">جاري التفكير...</span>
               </div>
             </div>
           </motion.div>
@@ -172,21 +216,38 @@ export default function AIChat() {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="p-4 bg-white border-t border-slate-100">
+      <div className="p-4 bg-surface-container-low border-t border-outline-variant/15">
+        {imagePreview && (
+          <div className="mb-3 relative inline-block">
+            <div className="w-20 h-20 rounded-xl overflow-hidden border border-outline-variant/30">
+              <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+            </div>
+            <button 
+              onClick={clearImage}
+              className="absolute -top-2 -right-2 bg-error text-on-error rounded-full p-1 hover:opacity-90 transition-opacity shadow-sm"
+            >
+              <X className="w-3 h-3" />
+            </button>
+          </div>
+        )}
         <div className="flex items-center gap-2 max-w-4xl mx-auto">
+          <label className="flex-shrink-0 bg-surface-container-highest hover:bg-surface-dim text-tertiary p-3 rounded-xl transition-colors cursor-pointer flex items-center justify-center">
+            <ImageIcon className="w-5 h-5" />
+            <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} disabled={isLoading} />
+          </label>
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             placeholder="اسأل عن التغذية، الأمراض، أو جودة المياه..."
-            className="flex-1 bg-slate-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-xl px-4 py-3 outline-none transition-all"
+            className="flex-1 bg-surface-container-lowest border-none focus:ring-2 focus:ring-primary/20 rounded-xl px-4 py-3 outline-none transition-all font-body text-on-surface placeholder:text-outline-variant"
             disabled={isLoading}
           />
           <button
             onClick={handleSend}
-            disabled={!input.trim() || isLoading}
-            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white p-3 rounded-xl transition-colors flex items-center justify-center"
+            disabled={(!input.trim() && !imageFile) || isLoading}
+            className="liquid-gradient hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-white p-3 rounded-xl transition-all flex items-center justify-center shadow-md"
           >
             <Send className="w-5 h-5 rtl:-scale-x-100" />
           </button>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { motion } from "motion/react";
-import { Wallet, Plus, Trash2, TrendingUp, Receipt } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { Wallet, PlusCircle, Save, Utensils, Waves, Zap, Trash2, TrendingUp } from "lucide-react";
 
 interface Expense {
   id: string;
@@ -12,19 +12,18 @@ interface Expense {
 
 export default function Expenses() {
   const [expenses, setExpenses] = useState<Expense[]>([
-    { id: "1", date: new Date().toISOString().split('T')[0], category: "علف", amount: 1500, notes: "شكاير علف 30% بروتين" },
-    { id: "2", date: new Date().toISOString().split('T')[0], category: "زريعة", amount: 3000, notes: "زريعة بلطي وحيد الجنس" },
+    { id: "1", date: new Date().toISOString().split('T')[0], category: "أعلاف", amount: 2200, notes: "أعلاف بروتين 30%" },
+    { id: "2", date: new Date().toISOString().split('T')[0], category: "زريعة", amount: 1800, notes: "زريعة بلطي سوبر" },
+    { id: "3", date: new Date().toISOString().split('T')[0], category: "فواتير", amount: 500, notes: "فاتورة كهرباء" },
   ]);
 
   const [amount, setAmount] = useState<number | "">("");
-  const [category, setCategory] = useState("علف");
+  const [category, setCategory] = useState("");
   const [notes, setNotes] = useState("");
-
-  const categories = ["علف", "زريعة", "كهرباء", "عمالة", "أدوية/فيتامينات", "أخرى"];
 
   const handleAddExpense = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!amount || amount <= 0) return;
+    if (!amount || amount <= 0 || !category) return;
 
     const newExpense: Expense = {
       id: Date.now().toString(),
@@ -37,6 +36,7 @@ export default function Expenses() {
     setExpenses([newExpense, ...expenses]);
     setAmount("");
     setNotes("");
+    setCategory("");
   };
 
   const handleDelete = (id: string) => {
@@ -45,147 +45,157 @@ export default function Expenses() {
 
   const totalExpenses = expenses.reduce((sum, exp) => sum + exp.amount, 0);
 
+  const getCategoryIcon = (cat: string) => {
+    switch (cat) {
+      case "أعلاف": return <Utensils className="w-6 h-6" />;
+      case "زريعة": return <Waves className="w-6 h-6" />;
+      case "فواتير": return <Zap className="w-6 h-6" />;
+      default: return <Wallet className="w-6 h-6" />;
+    }
+  };
+
+  const getCategoryColor = (cat: string) => {
+    switch (cat) {
+      case "أعلاف": return "bg-secondary-container/20 text-on-secondary-container";
+      case "زريعة": return "bg-tertiary-fixed/30 text-on-tertiary-fixed-variant";
+      case "فواتير": return "bg-surface-container-highest text-tertiary";
+      default: return "bg-primary-container/20 text-on-primary-container";
+    }
+  };
+
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-slate-800 mb-2">سجل المصروفات</h2>
-        <p className="text-slate-600">تتبع تكاليف الدورة الإنتاجية لضمان إدارة مالية ناجحة لمشروعك.</p>
-      </div>
+    <div className="space-y-8 max-w-4xl mx-auto pb-12">
+      {/* Page Title & Hero Summary */}
+      <section className="mb-8">
+        <div className="flex justify-between items-end mb-6">
+          <div>
+            <span className="text-tertiary text-sm font-medium block mb-1">الإدارة المالية</span>
+            <h2 className="text-3xl font-headline font-bold tracking-tight text-on-surface">سجل المصروفات</h2>
+          </div>
+        </div>
+
+        {/* Bento Summary Card */}
+        <div className="liquid-gradient rounded-[2rem] p-8 text-white editorial-shadow relative overflow-hidden">
+          <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 mb-4 opacity-90">
+              <Wallet className="w-6 h-6" />
+              <span className="text-sm font-medium">إجمالي مصروفات الشهر</span>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-5xl font-extrabold tracking-tighter">{totalExpenses.toLocaleString()}</span>
+              <span className="text-xl font-medium opacity-80">ج.م</span>
+            </div>
+            <div className="mt-6 flex items-center gap-2 bg-white/10 w-fit px-4 py-2 rounded-full backdrop-blur-md">
+              <TrendingUp className="w-4 h-4 text-secondary-fixed" />
+              <span className="text-xs">زيادة 12% عن الشهر الماضي</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Add Expense Form */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="lg:col-span-1 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit"
-        >
-          <h3 className="text-lg font-bold text-slate-800 mb-6 flex items-center">
-            <Plus className="w-5 h-5 ml-2 text-blue-600" />
-            إضافة مصروف جديد
-          </h3>
-          
-          <form onSubmit={handleAddExpense} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">المبلغ (جنيه)</label>
-              <input
-                type="number"
-                min="0"
-                required
-                value={amount}
-                onChange={(e) => setAmount(e.target.value ? Number(e.target.value) : "")}
-                className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="0.00"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">البند</label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        {/* Transaction Form Section */}
+        <section className="lg:col-span-1">
+          <div className="bg-surface-container-low rounded-[1.5rem] p-6 sticky top-24">
+            <h3 className="text-lg font-headline font-bold mb-5 flex items-center gap-2">
+              <PlusCircle className="w-6 h-6 text-primary" />
+              إضافة مصروف جديد
+            </h3>
+            <form className="space-y-5" onSubmit={handleAddExpense}>
+              <div>
+                <label className="block text-sm font-medium text-tertiary mb-2 px-1">المبلغ</label>
+                <input 
+                  type="number" 
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value ? Number(e.target.value) : "")}
+                  className="w-full bg-surface-container-lowest border-none rounded-xl p-4 focus:ring-2 focus:ring-primary/20 text-lg font-bold placeholder:text-outline-variant outline-none transition-all" 
+                  placeholder="0.00" 
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-tertiary mb-2 px-1">الفئة</label>
+                <select 
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="w-full bg-surface-container-lowest border-none rounded-xl p-4 focus:ring-2 focus:ring-primary/20 text-on-surface appearance-none outline-none transition-all"
+                  required
+                >
+                  <option value="">اختر الفئة</option>
+                  <option value="أعلاف">أعلاف</option>
+                  <option value="زريعة">زريعة</option>
+                  <option value="أدوات وصيانة">أدوات وصيانة</option>
+                  <option value="فواتير">كهرباء ومياه (فواتير)</option>
+                  <option value="أخرى">أخرى</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-tertiary mb-2 px-1">تفاصيل إضافية (اختياري)</label>
+                <textarea 
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  className="w-full bg-surface-container-lowest border-none rounded-xl p-4 focus:ring-2 focus:ring-primary/20 placeholder:text-outline-variant outline-none transition-all" 
+                  placeholder="مثال: توريد أعلاف الشركة الوطنية" 
+                  rows={2}
+                ></textarea>
+              </div>
+              <button 
+                type="submit"
+                className="w-full liquid-gradient text-white font-bold py-4 rounded-xl shadow-lg hover:opacity-90 transition-all flex justify-center items-center gap-2"
               >
-                {categories.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
-            </div>
+                <span>حفظ العملية</span>
+                <Save className="w-5 h-5" />
+              </button>
+            </form>
+          </div>
+        </section>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">ملاحظات (اختياري)</label>
-              <input
-                type="text"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="تفاصيل المصروف..."
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-xl transition-colors mt-4"
-            >
-              حفظ المصروف
-            </button>
-          </form>
-        </motion.div>
-
-        {/* Expenses List & Summary */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Summary Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-gradient-to-r from-emerald-500 to-teal-600 p-6 rounded-2xl shadow-sm text-white flex items-center justify-between"
-          >
-            <div>
-              <p className="text-emerald-100 font-medium mb-1">إجمالي المصروفات</p>
-              <h3 className="text-4xl font-bold">{totalExpenses.toLocaleString()} <span className="text-xl font-normal">ج.م</span></h3>
-            </div>
-            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
-              <TrendingUp className="w-8 h-8 text-white" />
-            </div>
-          </motion.div>
-
-          {/* List */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden"
-          >
-            <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-              <h3 className="text-lg font-bold text-slate-800 flex items-center">
-                <Receipt className="w-5 h-5 ml-2 text-slate-500" />
-                سجل العمليات
-              </h3>
-            </div>
-            
+        {/* Recent Transactions */}
+        <section className="lg:col-span-2">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-lg font-headline font-bold">آخر العمليات</h3>
+            <button className="text-primary text-sm font-semibold hover:underline">عرض الكل</button>
+          </div>
+          <div className="space-y-3">
             {expenses.length === 0 ? (
-              <div className="p-8 text-center text-slate-500">
+              <div className="p-8 text-center text-tertiary bg-surface-container-lowest rounded-2xl">
                 لا توجد مصروفات مسجلة حتى الآن.
               </div>
             ) : (
-              <div className="divide-y divide-slate-100">
+              <AnimatePresence>
                 {expenses.map((expense) => (
-                  <div key={expense.id} className="p-4 md:p-6 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                  <motion.div 
+                    key={expense.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="bg-surface-container-lowest p-4 rounded-2xl flex items-center justify-between transition-all hover:bg-white border border-transparent hover:border-outline-variant/10 shadow-sm"
+                  >
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Wallet className="w-6 h-6 text-blue-600" />
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${getCategoryColor(expense.category)}`}>
+                        {getCategoryIcon(expense.category)}
                       </div>
                       <div>
-                        <h4 className="font-bold text-slate-800">{expense.category}</h4>
-                        <div className="flex items-center gap-2 text-sm text-slate-500 mt-1">
-                          <span>{expense.date}</span>
-                          {expense.notes && (
-                            <>
-                              <span>•</span>
-                              <span className="truncate max-w-[150px] md:max-w-xs">{expense.notes}</span>
-                            </>
-                          )}
-                        </div>
+                        <p className="font-bold text-on-surface">{expense.notes || expense.category}</p>
+                        <p className="text-xs text-tertiary">{expense.date} • {expense.category}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <span className="font-bold text-slate-800 text-lg">
-                        {expense.amount.toLocaleString()} ج.م
-                      </span>
-                      <button
+                      <p className="font-bold text-error">{expense.amount.toLocaleString()}-</p>
+                      <button 
                         onClick={() => handleDelete(expense.id)}
-                        className="text-slate-400 hover:text-red-500 p-2 rounded-lg hover:bg-red-50 transition-colors"
-                        title="حذف"
+                        className="text-outline-variant hover:text-error transition-colors p-1"
                       >
                         <Trash2 className="w-5 h-5" />
                       </button>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
+              </AnimatePresence>
             )}
-          </motion.div>
-        </div>
+          </div>
+        </section>
       </div>
     </div>
   );
