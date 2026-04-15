@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ArrowLeft, ChevronLeft, ChevronRight, ThermometerSun, Timer, Waves, TrendingUp, Fish, Activity, ChevronDown, HelpCircle, Loader2, Sparkles, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight, ThermometerSun, Timer, Waves, TrendingUp, Fish, Activity, ChevronDown, HelpCircle, Loader2, Sparkles, CheckCircle2, Camera } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { getAIClient } from "../lib/ai";
 
@@ -27,19 +27,19 @@ const FAQ_DATA = [
   }
 ];
 
-const FISH_DATA = [
+const INITIAL_FISH_DATA = [
   {
     id: "tilapia",
     name: "البلطي النيلي",
     badge: "سهل التربية",
     badgeColor: "bg-primary/10 text-primary",
-    description: "يتميز بمقاومته العالية للأمراض وسرعة نموه، مما يجعله الخيار الأول للمبتدئين في المياه العذبة.",
+    description: "سمكة \"شجاعة\" تتحمل نقص الأكسجين، اقتصادية جداً بسبب استهلاكها لأنواع مختلفة من العلف، ومقاومة عالية للأمراض.",
     temp: "25-30°C",
-    time: "6-8 شهور",
+    time: "6-8 شهور للوصول للوزن التسويقي (350-500 جرام)",
     waterType: "مياه عذبة",
     salinity: "0-5 ppt",
-    ph: "6.5-8.5",
-    image: "https://images.unsplash.com/photo-1524704654690-b56c05c78a00?q=80&w=800&auto=format&fit=crop",
+    ph: "7-8.5",
+    image: "https://i.postimg.cc/7YXqFnsX/Whats-App-Image-2026-04-15-at-9-34-25-PM.jpg",
     tips: [
       "تأكد من جودة التهوية خاصة في فصل الصيف.",
       "استخدم أعلاف بنسبة بروتين 25-30%.",
@@ -49,15 +49,15 @@ const FISH_DATA = [
   {
     id: "seabream",
     name: "الدنيس",
-    badge: "قيمة عالية",
+    badge: "سمكة تصديرية",
     badgeColor: "bg-secondary-container text-on-secondary-container",
-    description: "من أرقى أنواع الأسماك البحرية، يتطلب عناية خاصة بجودة المياه وملوحتها لتحقيق أقصى ربحية.",
+    description: "سمكة ذات قيمة اقتصادية وعالية جداً (تصديرية)، طعمها ممتاز، وتتطلب مياهاً ذات جودة عالية وأكسجين مرتفع دائماً.",
     temp: "18-24°C",
-    time: "12-14 شهر",
+    time: "12-15 شهر للوصول لوزن التسويق (350-450جرام)",
     waterType: "مياه مالحة",
-    salinity: "35-40 ppt",
-    ph: "7.5-8.5",
-    image: "https://images.unsplash.com/photo-1534043464124-3be32fe000c9?q=80&w=800&auto=format&fit=crop",
+    salinity: "30-38 جزء في الألف",
+    ph: "8-8.5",
+    image: "https://i.postimg.cc/hjqFzXZQ/Whats-App-Image-2026-04-15-at-9-35-11-PM.jpg",
     tips: [
       "يحتاج إلى مياه عالية النقاوة وتغيير مستمر.",
       "يفضل استخدام أعلاف غنية بالبروتين البحري.",
@@ -67,15 +67,15 @@ const FISH_DATA = [
   {
     id: "seabass",
     name: "القاروص",
-    badge: "نمو سريع",
+    badge: "قيمة عالية",
     badgeColor: "bg-tertiary-container text-on-tertiary-container",
-    description: "سمك مفترس يحتاج لنظام غذائي غني بالبروتين، يتميز بقدرته على التكيف مع مستويات ملوحة مختلفة.",
-    temp: "22-28°C",
-    time: "10-12 شهر",
+    description: "سمكة مفترسة (تحتاج بروتين عالي في العلف)، نموها بطيء لكن سعرها في السوق مرتفع جداً، وتعتبر من أفخر أنواع الأسماك البحرية.",
+    temp: "20-25°C",
+    time: "14-18 شهر للوصول لوزن التسويق (400-600 جرام)",
     waterType: "مياه مالحة / شروب",
-    salinity: "10-40 ppt",
-    ph: "7.0-8.5",
-    image: "https://images.unsplash.com/photo-1516682732261-5122ea7b5f54?q=80&w=800&auto=format&fit=crop",
+    salinity: "10-30 جزء في الألف",
+    ph: "7.5-8.5 (يحتاج لمياه قلوية قليلاً، حساس للإجهاد البيئي)",
+    image: "https://i.postimg.cc/jdSp70cD/rhv-w.jpg",
     tips: [
       "يحتاج لأعلاف بنسبة بروتين تتجاوز 45%.",
       "يجب فرز الأسماك دورياً لتجنب الافتراس الداخلي.",
@@ -91,6 +91,21 @@ interface StartFromScratchProps {
 export default function StartFromScratch({ setActiveTab }: StartFromScratchProps) {
   const [expandedFish, setExpandedFish] = useState<string | null>(null);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
+  const [fishImages, setFishImages] = useState<Record<string, string>>({});
+
+  const handleImageChange = (fishId: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFishImages(prev => ({
+          ...prev,
+          [fishId]: reader.result as string
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   // Beginner Tool State
   const [farmingType, setFarmingType] = useState<string>("");
@@ -285,15 +300,24 @@ export default function StartFromScratch({ setActiveTab }: StartFromScratchProps
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {FISH_DATA.map((fish) => (
+          {INITIAL_FISH_DATA.map((fish) => (
             <div key={fish.id} className="group relative bg-surface-container-lowest rounded-[2rem] overflow-hidden editorial-shadow transition-all duration-500 hover:-translate-y-2">
-              <div className="h-64 overflow-hidden relative">
+              <div className="h-64 overflow-hidden relative group/image">
                 <img 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                   alt={fish.name} 
-                  src={fish.image} 
+                  src={fishImages[fish.id] || fish.image} 
                   referrerPolicy="no-referrer" 
                 />
+                <label className="absolute top-4 right-4 w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center cursor-pointer opacity-0 group-hover/image:opacity-100 transition-opacity z-10 backdrop-blur-sm">
+                  <Camera className="w-5 h-5 text-white" />
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    className="hidden" 
+                    onChange={(e) => handleImageChange(fish.id, e)} 
+                  />
+                </label>
               </div>
               <div className="p-8">
                 <div className="flex justify-between items-start mb-4">

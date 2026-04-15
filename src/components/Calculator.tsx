@@ -10,9 +10,47 @@ export default function Calculator() {
 
   // Simplified feed rates based on fish type (percentage of body weight)
   const feedRates = {
-    tilapia: 0.025, // 2.5%
     seabass: 0.015, // 1.5%
     seabream: 0.018, // 1.8%
+  };
+
+  const getTilapiaFeedRate = (weight: number) => {
+    const table = [
+      { w: 0.01, r: 42 }, { w: 0.05, r: 23.2 }, { w: 0.1, r: 16.8 },
+      { w: 0.5, r: 9.0 }, { w: 1.0, r: 8.5 }, { w: 5.0, r: 7.5 },
+      { w: 10.0, r: 7.0 }, { w: 25.0, r: 5.6 }, { w: 35.0, r: 5.32 },
+      { w: 50.0, r: 5.0 }, { w: 75.0, r: 4.75 }, { w: 100.0, r: 4.54 },
+      { w: 150.0, r: 4.05 }, { w: 200.0, r: 3.71 }, { w: 250.0, r: 3.4 },
+      { w: 300.0, r: 3.17 }, { w: 400.0, r: 2.76 }, { w: 500.0, r: 2.40 },
+      { w: 600.0, r: 2.07 }, { w: 700.0, r: 1.79 }, { w: 800.0, r: 1.50 },
+      { w: 900.0, r: 1.15 }, { w: 1000.0, r: 1.15 }
+    ];
+    
+    if (weight <= table[0].w) return table[0].r / 100;
+    if (weight >= table[table.length - 1].w) return table[table.length - 1].r / 100;
+    
+    for (let i = 0; i < table.length - 1; i++) {
+      if (weight >= table[i].w && weight <= table[i+1].w) {
+        const w1 = table[i].w;
+        const r1 = table[i].r;
+        const w2 = table[i+1].w;
+        const r2 = table[i+1].r;
+        const interpolatedR = r1 + ((weight - w1) / (w2 - w1)) * (r2 - r1);
+        return interpolatedR / 100;
+      }
+    }
+    return 0.025;
+  };
+
+  const getTilapiaProduct = (weight: number) => {
+    if (weight <= 1) return "Nutra 0";
+    if (weight <= 1.1) return "Nutra 80";
+    if (weight <= 10) return "Nutra 120";
+    if (weight <= 35) return "Nutra 160";
+    if (weight <= 60) return "Optiline 2.0";
+    if (weight <= 184) return "Optiline 3.0";
+    if (weight <= 521) return "Optiline 4.5";
+    return "Optiline 6.0";
   };
 
   const getTempMultiplier = (type: string, temp: number | "") => {
@@ -40,7 +78,15 @@ export default function Calculator() {
     // Total biomass in grams
     const totalBiomassGrams = Number(fishCount) * Number(avgWeight);
     // Base feed in grams
-    const baseFeedGrams = totalBiomassGrams * feedRates[fishType as keyof typeof feedRates];
+    let baseFeedGrams = 0;
+    
+    if (fishType === "tilapia") {
+      const rate = getTilapiaFeedRate(Number(avgWeight));
+      baseFeedGrams = totalBiomassGrams * rate;
+    } else {
+      baseFeedGrams = totalBiomassGrams * feedRates[fishType as keyof typeof feedRates];
+    }
+    
     const multiplier = getTempMultiplier(fishType, waterTemp);
     const finalFeedGrams = baseFeedGrams * multiplier;
 
@@ -87,7 +133,12 @@ export default function Calculator() {
               <span className="text-7xl font-headline font-black text-primary tracking-tighter">{feedResult.value}</span>
               <span className="text-2xl font-bold text-primary-container">{feedResult.unit}</span>
             </div>
-            <p className="text-on-surface-variant text-sm flex items-center gap-2">
+            {fishType === "tilapia" && avgWeight && (
+              <div className="bg-primary/10 text-primary px-4 py-2 rounded-lg inline-block font-bold mt-2">
+                المنتج الموصى به: {getTilapiaProduct(Number(avgWeight))}
+              </div>
+            )}
+            <p className="text-on-surface-variant text-sm flex items-center gap-2 mt-2">
               <CheckCircle className="w-5 h-5 text-secondary" />
               هذه الكمية محسوبة لنمو مثالي وصحة مستدامة للمياه.
             </p>

@@ -15,6 +15,19 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>("start");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const [profileImage, setProfileImage] = useState("https://i.postimg.cc/3NJcmmX3/Whats-App-Image-2026-04-13-at-9-43-41-PM.jpg");
+
+  const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const tabs = [
     { id: "start", label: "تعلم من الصفر", icon: Sprout },
     { id: "diseases", label: "دليل الأمراض", icon: Stethoscope },
@@ -31,10 +44,14 @@ export default function App() {
       {/* TopAppBar */}
       <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-surface transition-colors border-b border-outline-variant/15">
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden relative block">
-            <img className="w-full h-full object-cover" alt="User" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcA4oCeFHmHCY-D-EibZkxng-00cYd97inGKxNAd_NFFyt7lWZfihdjPpwBAUh-MXHHJm5P0TszYrGMuGJ1ArknkJGO_K0tmBrC8bdYISr5ztSIpb180KVSs3YIMumhBk5MgyadUHzk9U3C1RdOemgxYYqrK2qyICvihDKpcMqenAiO3pNzUJuUyfs-g5HSJVpRuHuEe1PG25Z2RNV4R4eSQYj_SgSxnZBScXvsj4F9knkiUl9IpgFBU0_Khs0HLrvmOLGXCnvocA" referrerPolicy="no-referrer" />
-          </div>
-          <h1 className="text-xl font-extrabold text-primary tracking-tight">مرشد الاستزراع</h1>
+          <label className="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden relative group cursor-pointer block shrink-0">
+            <img className="w-full h-full object-cover" alt="User" src={profileImage} referrerPolicy="no-referrer" />
+            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <Camera className="w-4 h-4 text-white" />
+            </div>
+            <input type="file" accept="image/*" className="hidden" onChange={handleProfileImageChange} />
+          </label>
+          <h1 className="text-xl font-extrabold text-primary tracking-tight">Aqora: Your Smart Aquaculture Advisor</h1>
         </div>
         <div className="flex items-center gap-2">
           <button className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors">
