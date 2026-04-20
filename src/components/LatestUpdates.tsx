@@ -59,8 +59,8 @@ export default function LatestUpdates() {
 
     try {
       const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: prompt,
+        model: "gemini-1.5-flash",
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
         config: {
           systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
         }
@@ -69,11 +69,16 @@ export default function LatestUpdates() {
         ...prev, 
         [id]: { content: response.text || "", isLoading: false, error: "" } 
       }));
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error fetching updates:", err);
+      const errorMsg = err.message || "حدث خطأ غير معروف";
       setCategoryData(prev => ({ 
         ...prev, 
-        [id]: { content: "", isLoading: false, error: "حدث خطأ أثناء جلب التحديثات. تأكد من اتصالك بالإنترنت أو صلاحية مفتاح API." } 
+        [id]: { 
+          content: "", 
+          isLoading: false, 
+          error: `خطأ في الاتصال: ${errorMsg}. تأكد من صلاحية مفتاح API على Vercel.` 
+        } 
       }));
     }
   };

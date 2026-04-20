@@ -103,7 +103,7 @@ export default function AIChat() {
       clearImage();
 
       let response = await ai.models.generateContent({
-        model: "gemini-flash-latest",
+        model: "gemini-1.5-flash",
         contents: currentHistory,
         config: {
           systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
@@ -143,7 +143,7 @@ export default function AIChat() {
         });
 
         response = await ai.models.generateContent({
-          model: "gemini-flash-latest",
+          model: "gemini-1.5-flash",
           contents: currentHistory,
           config: {
             systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
@@ -154,9 +154,14 @@ export default function AIChat() {
 
       const reply = response.text || "عذراً، حدث خطأ في معالجة طلبك.";
       setMessages((prev) => [...prev, { id: Date.now().toString(), role: "model", content: reply }]);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Chat error:", error);
-      setMessages((prev) => [...prev, { id: Date.now().toString(), role: "model", content: "عذراً، حدث خطأ في الاتصال بالمستشار. يرجى المحاولة مرة أخرى." }]);
+      const errorDetail = error.message || "فشل الاتصال بخدمة الذكاء الاصطناعي";
+      setMessages((prev) => [...prev, { 
+        id: Date.now().toString(), 
+        role: "model", 
+        content: `عذراً، حدث خطأ في الاتصال: ${errorDetail}. تأكد من إعداد مفتاح API بشكل صحيح في Vercel.` 
+      }]);
     } finally {
       setIsLoading(false);
     }

@@ -4,19 +4,22 @@ import { motion } from "motion/react";
 
 export default function EconomicDashboard() {
   const [fishType, setFishType] = useState<"tilapia" | "seabass" | "seabream">("tilapia");
-  const [feedPrice, setFeedPrice] = useState<number>(25000); // EGP per ton
-  const [fishPrice, setFishPrice] = useState<number>(85); // EGP per kg
+  const [feedPrice, setFeedPrice] = useState<number>(26800); // EGP per ton
+  const [fishPrice, setFishPrice] = useState<number>(82); // EGP per kg
   const [targetWeight, setTargetWeight] = useState<number>(500); // grams
   const [fishCount, setFishCount] = useState<number>(10000); // number of fish
   const [fingerlingCost, setFingerlingCost] = useState<number>(2.5); // EGP per fingerling
   const [otherCosts, setOtherCosts] = useState<number>(5000); // EGP for other expenses
   const [isSyncing, setIsSyncing] = useState(false);
   const [marketData, setMarketData] = useState<any>(null);
+  const [syncError, setSyncError] = useState<string | null>(null);
 
   const fetchMarketPrices = async () => {
     setIsSyncing(true);
+    setSyncError(null);
     try {
       const res = await fetch("/api/market-prices");
+      if (!res.ok) throw new Error("Server communication error");
       const data = await res.json();
       setMarketData(data);
       
@@ -31,6 +34,7 @@ export default function EconomicDashboard() {
       }
     } catch (error) {
       console.error("Failed to sync prices:", error);
+      setSyncError("عذراً، فشل الاتصال بخدمة الأسعار اللحظية. يرجى مراجعة الموقع الرسمي.");
     } finally {
       setIsSyncing(false);
     }
@@ -142,7 +146,14 @@ export default function EconomicDashboard() {
           </div>
         </div>
 
-        {marketData && (
+        {syncError && (
+          <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-2xl flex items-center gap-3 border border-red-200">
+            <AlertCircle className="w-5 h-5" />
+            <span className="text-xs font-bold">{syncError}</span>
+          </div>
+        )}
+
+        {marketData && !syncError && (
           <div className="mb-6 p-4 bg-surface-container rounded-2xl flex items-center gap-3 border border-outline-variant/10">
             <Info className="w-5 h-5 text-primary" />
             <span className="text-xs font-bold text-on-surface-variant">
@@ -327,21 +338,25 @@ export default function EconomicDashboard() {
             {/* Price reference info */}
             <div className="bg-surface-container-high/50 p-6 rounded-[2rem] border border-outline-variant/10">
               <h4 className="font-bold text-sm text-primary mb-3 flex items-center gap-2">
-                <Info className="w-4 h-4" /> مراجع الأسعار والبيانات
+                <Info className="w-4 h-4" /> مراجع الأسعار والبيانات الرسمية
               </h4>
               <ul className="space-y-3">
                 <li className="text-xs text-on-surface-variant flex items-center justify-between">
-                  <span>سوق العبور (للأسماك)</span>
-                  <a href="https://www.obourmarket.org.eg/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-bold">زيارة الموقع</a>
+                  <span>أسعار سوق العبور اليوم</span>
+                  <div className="flex gap-2">
+                    <a href="https://www.obourmarket.org.eg/prices/today/1/3/0/0/0/0/0" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-bold">الموقع الرسمي</a>
+                    <span className="text-outline-variant">|</span>
+                    <a href="https://www.google.com/search?q=%D8%A3%D8%B3%D8%B1%D8%A7%D8%B9+%D8%A7%D9%84%D8%B3%D9%85%D9%83+%D8%A7%D9%84%D9%8A%D9%88%D9%85+%D8%B3%D9%88%D9%82+%D8%A7%D9%84%D8%B9%D8%A8%D9%88%D8%B1" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-bold text-[10px]">بحث جوجل</a>
+                  </div>
                 </li>
                 <li className="text-xs text-on-surface-variant flex items-center justify-between">
                   <span>بوابة الأسعار المحلية (العلف)</span>
-                  <a href="https://www.prices.idsc.gov.eg/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-bold">زيارة البوابة</a>
+                  <a href="https://prices.idsc.gov.eg/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-bold">زيارة البوابة</a>
                 </li>
               </ul>
               <div className="mt-4 pt-4 border-t border-outline-variant/10">
                 <p className="text-[10px] text-on-surface-variant leading-relaxed italic">
-                  * ملاحظة: يتم حساب "معامل التحويل FCR" في هذا القالب بناءً على المعايير النموذجية لكل صنف. قد تختلف النتائج الواقعية حسب كفاءة الإدارة والظروف البيئية.
+                  * ملاحظة: الأسعار المعروضة هي "متوسطات إرشادية" للسوق المصري (أبريل 2026). يرجى التأكد من التاجر المحلي قبل إتمام أي صفقات.
                 </p>
               </div>
             </div>
