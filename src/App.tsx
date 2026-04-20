@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BookOpen, Activity, MessageSquare, Menu, X, Calculator as CalcIcon, Wallet, Newspaper, Stethoscope, ClipboardList, Sprout, Bell, Camera } from "lucide-react";
+import { BookOpen, Activity, MessageSquare, Menu, X, Calculator as CalcIcon, Wallet, Newspaper, Stethoscope, ClipboardList, Sprout, Bell, Camera, User } from "lucide-react";
 import IoTMonitor from "./components/IoTMonitor";
 import AIChat from "./components/AIChat";
 import Calculator from "./components/Calculator";
@@ -8,8 +8,9 @@ import LatestUpdates from "./components/LatestUpdates";
 import Diseases from "./components/Diseases";
 import DailyLog from "./components/DailyLog";
 import StartFromScratch from "./components/StartFromScratch";
+import EconomicDashboard from "./components/EconomicDashboard";
 
-type Tab = "start" | "monitor" | "chat" | "calculator" | "expenses" | "updates" | "diseases" | "dailyLog";
+type Tab = "start" | "monitor" | "chat" | "calculator" | "expenses" | "updates" | "diseases" | "dailyLog" | "economics";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>("start");
@@ -34,6 +35,7 @@ export default function App() {
     { id: "dailyLog", label: "سجل العمليات اليومي", icon: ClipboardList },
     { id: "monitor", label: "مراقبة الأحواض", icon: Activity },
     { id: "calculator", label: "حاسبة العلف", icon: CalcIcon },
+    { id: "economics", label: "المحلل الاقتصادي", icon: Wallet },
     { id: "expenses", label: "سجل المصروفات", icon: Wallet },
     { id: "updates", label: "أحدث التطورات", icon: Newspaper },
     { id: "chat", label: "المستشار الذكي", icon: MessageSquare },
@@ -44,8 +46,23 @@ export default function App() {
       {/* TopAppBar */}
       <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-surface transition-colors border-b border-outline-variant/15">
         <div className="flex items-center gap-4">
-          <label className="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden relative group cursor-pointer block shrink-0">
-            <img className="w-full h-full object-cover" alt="User" src={profileImage} referrerPolicy="no-referrer" />
+          <label className="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden relative group cursor-pointer block shrink-0 border border-outline-variant/10">
+            {profileImage ? (
+              <img 
+                className="w-full h-full object-cover" 
+                alt="User" 
+                src={profileImage} 
+                referrerPolicy="no-referrer"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                  (e.target as HTMLImageElement).parentElement?.classList.add('flex', 'items-center', 'justify-center');
+                }}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary">
+                <User className="w-6 h-6" />
+              </div>
+            )}
             <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
               <Camera className="w-4 h-4 text-white" />
             </div>
@@ -127,6 +144,7 @@ export default function App() {
         {activeTab === "dailyLog" && <DailyLog />}
         {activeTab === "monitor" && <IoTMonitor />}
         {activeTab === "calculator" && <Calculator />}
+        {activeTab === "economics" && <EconomicDashboard />}
         {activeTab === "expenses" && <Expenses />}
         {activeTab === "updates" && <LatestUpdates />}
         {activeTab === "chat" && <AIChat />}

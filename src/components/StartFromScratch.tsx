@@ -39,7 +39,7 @@ const INITIAL_FISH_DATA = [
     waterType: "مياه عذبة",
     salinity: "0-5 ppt",
     ph: "7-8.5",
-    image: "https://i.postimg.cc/7YXqFnsX/Whats-App-Image-2026-04-15-at-9-34-25-PM.jpg",
+    image: "https://i.postimg.cc/pdYHjxb8/Whats-App-Image-2026-04-15-at-9-34-25-PM.jpg",
     tips: [
       "تأكد من جودة التهوية خاصة في فصل الصيف.",
       "استخدم أعلاف بنسبة بروتين 25-30%.",
@@ -111,6 +111,7 @@ export default function StartFromScratch({ setActiveTab }: StartFromScratchProps
   const [farmingType, setFarmingType] = useState<string>("");
   const [pondType, setPondType] = useState<string>("");
   const [fishType, setFishType] = useState<string>("");
+  const [landArea, setLandArea] = useState<number | "">("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedGuide, setGeneratedGuide] = useState<string | null>(null);
 
@@ -119,7 +120,7 @@ export default function StartFromScratch({ setActiveTab }: StartFromScratchProps
   };
 
   const handleGenerateGuide = async () => {
-    if (!farmingType || !pondType || !fishType) return;
+    if (!farmingType || !pondType || !fishType || !landArea) return;
     
     setIsGenerating(true);
     setGeneratedGuide(null);
@@ -131,9 +132,12 @@ export default function StartFromScratch({ setActiveTab }: StartFromScratchProps
       - نوع الاستزراع: ${farmingType}
       - نوع الحوض: ${pondType}
       - نوع السمك المربى: ${fishType}
+      - مساحة الأرض المتوفرة: ${landArea} متر مربع
       
-      أعطني خطة عمل وخطوات تفصيلية من الصفر للبدء في هذا المشروع بنجاح. 
-      نسق الإجابة في خطوات واضحة ومبسطة باستخدام Markdown. ركز على النصائح العملية للمبتدئين.`;
+      المهمة المطلوبة:
+      1. أعطني خطة عمل وخطوات تفصيلية من الصفر للبدء.
+      2. احسب لي بناءً على مساحة الأرض (${landArea} م²) ونوع الاستزراع (${farmingType}) كم أحتاج من الزريعة (عدد الأسماك) في هذه المساحة.
+      3. نسق الإجابة في خطوات واضحة ومبسطة باستخدام Markdown مع إبراز الفقرة الخاصة بحساب عدد الأسماك.`;
 
       const response = await ai.models.generateContent({
         model: "gemini-2.5-pro",
@@ -245,11 +249,26 @@ export default function StartFromScratch({ setActiveTab }: StartFromScratchProps
               <option value="الجمبري">الجمبري (روبيان)</option>
             </select>
           </div>
+
+          {/* Land Area */}
+          <div className="space-y-3">
+            <label className="block text-sm font-bold text-on-surface">مساحة الأرض المتاحة (م²) </label>
+            <div className="relative">
+              <input 
+                type="number" 
+                placeholder="مثال: 1000" 
+                value={landArea}
+                onChange={(e) => setLandArea(e.target.value ? Number(e.target.value) : "")}
+                className="w-full bg-surface text-on-surface border border-outline-variant/50 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow outline-none" 
+              />
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold text-outline">م²</span>
+            </div>
+          </div>
         </div>
 
         <button
           onClick={handleGenerateGuide}
-          disabled={!farmingType || !pondType || !fishType || isGenerating}
+          disabled={!farmingType || !pondType || !fishType || !landArea || isGenerating}
           className="w-full md:w-auto px-8 py-4 bg-primary text-white rounded-xl font-bold hover:bg-primary-container transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {isGenerating ? (
@@ -301,14 +320,21 @@ export default function StartFromScratch({ setActiveTab }: StartFromScratchProps
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {INITIAL_FISH_DATA.map((fish) => (
-            <div key={fish.id} className="group relative bg-surface-container-lowest rounded-[2rem] overflow-hidden editorial-shadow transition-all duration-500 hover:-translate-y-2">
-              <div className="h-64 overflow-hidden relative group/image">
+            <div key={fish.id} className="fish-card group relative bg-surface-container-lowest rounded-[2rem] overflow-hidden editorial-shadow transition-all duration-500 hover:-translate-y-2">
+              <div className="aspect-[4/3] w-full overflow-hidden relative group/image bg-surface-container">
                 <img 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                   alt={fish.name} 
                   src={fishImages[fish.id] || fish.image} 
-                  referrerPolicy="no-referrer" 
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).classList.add('opacity-0');
+                    (e.target as HTMLImageElement).parentElement?.classList.add('flex', 'items-center', 'justify-center');
+                  }}
                 />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-has-[img.opacity-0]:opacity-100 pointer-events-none">
+                  <Fish className="w-12 h-12 text-primary/20" />
+                </div>
                 <label className="absolute top-4 right-4 w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center cursor-pointer opacity-0 group-hover/image:opacity-100 transition-opacity z-10 backdrop-blur-sm">
                   <Camera className="w-5 h-5 text-white" />
                   <input 
@@ -347,7 +373,7 @@ export default function StartFromScratch({ setActiveTab }: StartFromScratchProps
                 {/* Expandable Details */}
                 <button 
                   onClick={() => toggleExpand(fish.id)}
-                  className="text-primary text-sm font-bold flex items-center gap-1 hover:underline"
+                  className="learn-more-link text-primary text-sm font-bold flex items-center gap-1 hover:underline transition-all hover:text-[1.05em] origin-right"
                 >
                   {expandedFish === fish.id ? "إخفاء التفاصيل" : "عرض التفاصيل العلمية"}
                   <ChevronDown className={`w-4 h-4 transition-transform ${expandedFish === fish.id ? "rotate-180" : ""}`} />
