@@ -59,8 +59,8 @@ export default function LatestUpdates() {
 
     try {
       const response = await ai.models.generateContent({
-        model: "gemini-1.5-flash-latest",
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        model: "gemini-3-flash-preview",
+        contents: prompt,
         config: {
           systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
         }
@@ -72,12 +72,18 @@ export default function LatestUpdates() {
     } catch (err: any) {
       console.error("Error fetching updates:", err);
       const errorMsg = err.message || "حدث خطأ غير معروف";
+      let friendlyError = `خطأ في الاتصال: ${errorMsg}.`;
+      
+      if (errorMsg.includes("404") || errorMsg.includes("NOT_FOUND")) {
+        friendlyError = "خطأ 404: المحرك غير موجود. تأكد من إضافة GEMINI_API_KEY في إعدادات Vercel قبل الرفع.";
+      }
+
       setCategoryData(prev => ({ 
         ...prev, 
         [id]: { 
           content: "", 
           isLoading: false, 
-          error: `خطأ في الاتصال: ${errorMsg}. تأكد من صلاحية مفتاح API على Vercel.` 
+          error: friendlyError
         } 
       }));
     }

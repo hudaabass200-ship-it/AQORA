@@ -127,6 +127,11 @@ export default function StartFromScratch({ setActiveTab }: StartFromScratchProps
     
     try {
       const ai = getAIClient();
+      if (!ai) {
+        setGeneratedGuide("مفتاح API غير متوفر. يرجى إضافته من صفحة الإعدادات.");
+        return;
+      }
+      
       const prompt = `أنا مزارع مبتدئ أريد البدء في الاستزراع السمكي. 
       لقد اخترت الإعدادات التالية:
       - نوع الاستزراع: ${farmingType}
@@ -140,14 +145,23 @@ export default function StartFromScratch({ setActiveTab }: StartFromScratchProps
       3. نسق الإجابة في خطوات واضحة ومبسطة باستخدام Markdown مع إبراز الفقرة الخاصة بحساب عدد الأسماك.`;
 
       const response = await ai.models.generateContent({
-        model: "gemini-1.5-flash-latest",
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        model: "gemini-3-flash-preview",
+        contents: prompt,
       });
 
       setGeneratedGuide(response.text || "عذراً، لم أتمكن من توليد الخطة. حاول مرة أخرى.");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error generating guide:", error);
-      setGeneratedGuide("حدث خطأ أثناء الاتصال بالمستشار الذكي. يرجى المحاولة لاحقاً.");
+      const errorDetail = error.message || "فشل الاتصال بخدمة الذكاء الاصطناعي";
+      
+      let friendlyError = `حدث خطأ في الاتصال: ${errorDetail}.`;
+      if (errorDetail.includes("404") || errorDetail.includes("NOT_FOUND")) {
+        friendlyError = "خطأ 404: لم يتم العثور على محرك الذكاء الاصطناعي. يرجى التأكد من إضافة مفتاح API (GEMINI_API_KEY) بشكل صحيح في إعدادات Vercel قبل عملية الرفع (Deployment).";
+      } else if (errorDetail.includes("API key")) {
+        friendlyError = "خطأ في مفتاح API: يبدو أن المفتاح المستخدم غير صحيح أو غير مفعل. تأكد من نسخه بشكل كامل من Google AI Studio.";
+      }
+      
+      setGeneratedGuide(friendlyError);
     } finally {
       setIsGenerating(false);
     }

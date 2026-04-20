@@ -103,7 +103,7 @@ export default function AIChat() {
       clearImage();
 
       let response = await ai.models.generateContent({
-        model: "gemini-1.5-flash-latest",
+        model: "gemini-3-flash-preview",
         contents: currentHistory,
         config: {
           systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
@@ -143,7 +143,7 @@ export default function AIChat() {
         });
 
         response = await ai.models.generateContent({
-          model: "gemini-1.5-flash-latest",
+          model: "gemini-3-flash-preview",
           contents: currentHistory,
           config: {
             systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
@@ -157,10 +157,16 @@ export default function AIChat() {
     } catch (error: any) {
       console.error("Chat error:", error);
       const errorDetail = error.message || "فشل الاتصال بخدمة الذكاء الاصطناعي";
+      
+      let friendlyError = `عذراً، حدث خطأ في الاتصال: ${errorDetail}.`;
+      if (errorDetail.includes("404") || errorDetail.includes("NOT_FOUND")) {
+        friendlyError = "خطأ 404: لم يتم العثور على محرك الذكاء الاصطناعي. يرجى التأكد من إضافة مفتاح API (GEMINI_API_KEY) في إعدادات Vercel قبل عملية الرفع (Deployment).";
+      }
+
       setMessages((prev) => [...prev, { 
         id: Date.now().toString(), 
         role: "model", 
-        content: `عذراً، حدث خطأ في الاتصال: ${errorDetail}. تأكد من إعداد مفتاح API بشكل صحيح في Vercel.` 
+        content: friendlyError
       }]);
     } finally {
       setIsLoading(false);
