@@ -59,7 +59,7 @@ export default function LatestUpdates() {
 
     try {
       const response = await ai.models.generateContent({
-        model: "gemini-1.5-flash",
+        model: "gemini-1.5-flash-latest",
         contents: [{ role: "user", parts: [{ text: prompt }] }],
         config: {
           systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
