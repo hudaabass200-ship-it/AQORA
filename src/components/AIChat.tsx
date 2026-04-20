@@ -103,7 +103,7 @@ export default function AIChat() {
       clearImage();
 
       let response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-flash-latest",
         contents: currentHistory,
         config: {
           systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
@@ -143,7 +143,7 @@ export default function AIChat() {
         });
 
         response = await ai.models.generateContent({
-          model: "gemini-2.5-flash",
+          model: "gemini-flash-latest",
           contents: currentHistory,
           config: {
             systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,

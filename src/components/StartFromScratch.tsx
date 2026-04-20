@@ -140,7 +140,7 @@ export default function StartFromScratch({ setActiveTab }: StartFromScratchProps
       3. نسق الإجابة في خطوات واضحة ومبسطة باستخدام Markdown مع إبراز الفقرة الخاصة بحساب عدد الأسماك.`;
 
       const response = await ai.models.generateContent({
-        model: "gemini-2.5-pro",
+        model: "gemini-flash-latest",
         contents: prompt,
       });
 
