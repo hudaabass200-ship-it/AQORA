@@ -313,7 +313,7 @@ ${symptoms ? `الأعراض التي ألاحظها: ${symptoms}.` : 'يوجد 
       let friendlyError = "حدث خطأ أثناء التشخيص. تأكد من اتصالك بالإنترنت أو صلاحية مفتاح API.";
       
       if (errorMsg.includes("429") || errorMsg.includes("RESOURCE_EXHAUSTED") || errorMsg.includes("credits are depleted")) {
-        friendlyError = "⚠️ لقد انتهى الرصيد المتاح لمفتاح API الخاص بك. يرجى شحن الرصيد في Google AI Studio أو استخدام مفتاح جديد.";
+        friendlyError = "⚠️ لقد انتهى الرصيد المتاح. يرجى إضافة مفتاح جديد في GEMINI_API_KEY3 في Vercel ثم تذكر عمل (Redeploy) لتفعيل المفتاح.";
       }
       
       setDiagnosisError(friendlyError);

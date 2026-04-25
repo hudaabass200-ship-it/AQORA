@@ -1,7 +1,19 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
 export const getApiKey = () => {
-  return process.env.GEMINI_API_KEY3 || process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY2 || "";
+  if (process.env.GEMINI_API_KEY3) {
+    console.log("Using API Key Source: GEMINI_API_KEY3");
+    return process.env.GEMINI_API_KEY3;
+  }
+  if (process.env.GEMINI_API_KEY) {
+    console.log("Using API Key Source: GEMINI_API_KEY (Default)");
+    return process.env.GEMINI_API_KEY;
+  }
+  if (process.env.GEMINI_API_KEY2) {
+    console.log("Using API Key Source: GEMINI_API_KEY2");
+    return process.env.GEMINI_API_KEY2;
+  }
+  return "";
 };
 
 export const getAIClient = () => {

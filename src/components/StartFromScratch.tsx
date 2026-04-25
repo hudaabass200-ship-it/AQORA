@@ -160,7 +160,7 @@ export default function StartFromScratch({ setActiveTab }: StartFromScratchProps
       } else if (errorDetail.includes("API key")) {
         friendlyError = "خطأ في مفتاح API: يبدو أن المفتاح المستخدم غير صحيح أو غير مفعل. تأكد من نسخه بشكل كامل من Google AI Studio.";
       } else if (errorDetail.includes("429") || errorDetail.includes("RESOURCE_EXHAUSTED") || errorDetail.includes("credits are depleted")) {
-        friendlyError = "⚠️ خطأ في الحساب: لقد انتهى الرصيد المتاح لمفتاح API الخاص بك. يرجى شحن الرصيد في Google AI Studio أو استخدام مفتاح جديد.";
+        friendlyError = "⚠️ خطأ في الرصيد: لقد انتهى الرصيد المتاح. يرجى إضافة مفتاح جديد لـ GEMINI_API_KEY3 في إعدادات Vercel ثم تذكر عمل (Redeploy) لتفعيل المفتاح.";
       }
       
       setGeneratedGuide(friendlyError);

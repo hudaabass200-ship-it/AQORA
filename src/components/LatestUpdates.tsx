@@ -77,7 +77,7 @@ export default function LatestUpdates() {
       if (errorMsg.includes("404") || errorMsg.includes("NOT_FOUND")) {
         friendlyError = "خطأ 404: المحرك غير موجود. تأكد من إضافة GEMINI_API_KEY في إعدادات Vercel قبل الرفع.";
       } else if (errorMsg.includes("429") || errorMsg.includes("RESOURCE_EXHAUSTED") || errorMsg.includes("credits are depleted")) {
-        friendlyError = "⚠️ لقد انتهى الرصيد المتاح لمفتاح API الخاص بك. يرجى شحن الرصيد في Google AI Studio أو استخدام مفتاح جديد.";
+        friendlyError = "⚠️ انتهى الرصيد. أضف مفتاحاً جديداً في GEMINI_API_KEY3 في Vercel ثم تذكر عمل Redeploy.";
       }
 
       setCategoryData(prev => ({ 

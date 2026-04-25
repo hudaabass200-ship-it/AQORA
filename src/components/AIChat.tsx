@@ -162,7 +162,7 @@ export default function AIChat() {
       if (errorDetail.includes("404") || errorDetail.includes("NOT_FOUND")) {
         friendlyError = "خطأ 404: لم يتم العثور على محرك الذكاء الاصطناعي. يرجى التأكد من إضافة مفتاح API (GEMINI_API_KEY) في إعدادات Vercel قبل عملية الرفع (Deployment).";
       } else if (errorDetail.includes("429") || errorDetail.includes("RESOURCE_EXHAUSTED") || errorDetail.includes("credits are depleted")) {
-        friendlyError = "⚠️ خطأ في الحساب: لقد انتهى الرصيد المتاح لمفتاح API الخاص بك. يرجى شحن الرصيد في Google AI Studio أو استخدام مفتاح جديد (GEMINI_API_KEY3).";
+        friendlyError = "⚠️ خطأ في الرصيد: لقد انتهى الرصيد المتاح لمفاتيحك. يرجى إضافة مفتاح جديد لـ GEMINI_API_KEY3 في إعدادات Vercel ثم تذكر عمل (Redeploy/Deployments) لتطبيق التغيير.";
       }
 
       setMessages((prev) => [...prev, { 
