@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowLeft, ChevronLeft, ChevronRight, ThermometerSun, Timer, Waves, TrendingUp, Fish, Activity, ChevronDown, HelpCircle, Loader2, Sparkles, CheckCircle2, Camera } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { getAIClient } from "../lib/ai";
+import { tryAIRequest } from "../lib/ai";
 
 const FAQ_DATA = [
   {
@@ -126,12 +126,6 @@ export default function StartFromScratch({ setActiveTab }: StartFromScratchProps
     setGeneratedGuide(null);
     
     try {
-      const ai = getAIClient();
-      if (!ai) {
-        setGeneratedGuide("مفتاح API غير متوفر. يرجى إضافته من صفحة الإعدادات.");
-        return;
-      }
-      
       const prompt = `أنا مزارع مبتدئ أريد البدء في الاستزراع السمكي. 
       لقد اخترت الإعدادات التالية:
       - نوع الاستزراع: ${farmingType}
@@ -144,8 +138,8 @@ export default function StartFromScratch({ setActiveTab }: StartFromScratchProps
       2. احسب لي بناءً على مساحة الأرض (${landArea} م²) ونوع الاستزراع (${farmingType}) كم أحتاج من الزريعة (عدد الأسماك) في هذه المساحة.
       3. نسق الإجابة في خطوات واضحة ومبسطة باستخدام Markdown مع إبراز الفقرة الخاصة بحساب عدد الأسماك.`;
 
-      const response = await ai.models.generateContent({
-        model: "gemini-1.5-flash",
+      const response = await tryAIRequest({
+        model: "gemini-3-flash-preview",
         contents: prompt,
       });
 
@@ -156,11 +150,13 @@ export default function StartFromScratch({ setActiveTab }: StartFromScratchProps
       
       let friendlyError = `حدث خطأ في الاتصال: ${errorDetail}.`;
       if (errorDetail.includes("404") || errorDetail.includes("NOT_FOUND")) {
-        friendlyError = "خطأ 404: لم يتم العثور على محرك الذكاء الاصطناعي. يرجى التأكد من إضافة مفتاح API (GEMINI_API_KEY) بشكل صحيح في إعدادات Vercel قبل عملية الرفع (Deployment).";
+        friendlyError = "خطأ 404: المحرك غير موجود. تأكد من إضافة GEMINI_API_KEY في Vercel ثم تذكر عمل 'Redeploy' في تبويب Deployments.";
       } else if (errorDetail.includes("API key")) {
-        friendlyError = "خطأ في مفتاح API: يبدو أن المفتاح المستخدم غير صحيح أو غير مفعل. تأكد من نسخه بشكل كامل من Google AI Studio.";
+        friendlyError = "خطأ في مفتاح API: تأكد من صحة المفتاح في Vercel ثم قم بعمل إعادة بناء (Redeploy).";
       } else if (errorDetail.includes("429") || errorDetail.includes("RESOURCE_EXHAUSTED") || errorDetail.includes("credits are depleted")) {
-        friendlyError = "⚠️ خطأ في الرصيد: لقد انتهى الرصيد المتاح. يرجى إضافة مفتاح جديد لـ GEMINI_API_KEY3 في إعدادات Vercel ثم تذكر عمل (Redeploy) لتفعيل المفتاح.";
+        friendlyError = "⚠️ الرصيد نفد في كل المفاتيح الـ 3 المتاحة. أضف مفتاحاً جديداً في GEMINI_API_KEY3 في Vercel ثم اضغط 'Redeploy'.";
+      } else if (errorDetail.includes("No API keys")) {
+        friendlyError = "⚠️ لم يتم العثور على أي مفاتيح API. يرجى إضافتها في Vercel لكي تعمل الأداة.";
       }
       
       setGeneratedGuide(friendlyError);

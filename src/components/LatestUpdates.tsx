@@ -2,32 +2,32 @@ import { useState } from "react";
 import { Newspaper, Loader2, AlertCircle, ChevronDown, Droplets, Wheat, Stethoscope, Lightbulb, ChevronLeft } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { motion, AnimatePresence } from "motion/react";
-import { getAIClient, FISH_FARMING_SYSTEM_INSTRUCTION } from "../lib/ai";
+import { tryAIRequest, FISH_FARMING_SYSTEM_INSTRUCTION } from "../lib/ai";
 
 const CATEGORIES = [
   { 
-    id: 'water', 
-    title: 'تكنولوجيا المياه وجودتها', 
+    id: "water", 
+    title: "تكنولوجيا المياه وجودتها", 
     icon: Droplets, 
-    prompt: 'أعطني أحدث التطورات والتقنيات الحديثة في مجال تكنولوجيا المياه وجودتها في الاستزراع السمكي (خاصة البلطي، القاروص، والدنيس) في مصر والعالم. ركز على أنظمة الفلترة، إعادة التدوير (RAS)، والتحكم في الأمونيا والأكسجين. نسق الإجابة في نقاط واضحة ومختصرة.' 
+    prompt: "أعطني أحدث التطورات والتقنيات الحديثة في مجال تكنولوجيا المياه وجودتها في الاستزراع السمكي (خاصة البلطي، القاروص، والدنيس) في مصر والعالم. ركز على أنظمة الفلترة، إعادة التدوير (RAS)، والتحكم في الأمونيا والأكسجين. نسق الإجابة في نقاط واضحة ومختصرة." 
   },
   { 
-    id: 'feed', 
-    title: 'الأعلاف والتغذية البديلة', 
+    id: "feed", 
+    title: "الأعلاف والتغذية البديلة", 
     icon: Wheat, 
-    prompt: 'أعطني أحدث التطورات في مجال أعلاف وتغذية الأسماك (البلطي، القاروص، الدنيس). ركز على بدائل مسحوق السمك (مثل الحشرات والبروتين النباتي)، الأعلاف الوظيفية، وتقليل تكلفة التغذية. نسق الإجابة في نقاط واضحة ومختصرة.' 
+    prompt: "أعطني أحدث التطورات في مجال أعلاف وتغذية الأسماك (البلطي، القاروص، الدنيس). ركز على بدائل مسحوق السمك (مثل الحشرات والبروتين النباتي)، الأعلاف الوظيفية، وتقليل تكلفة التغذية. نسق الإجابة في نقاط واضحة ومختصرة." 
   },
   { 
-    id: 'disease', 
-    title: 'الأمراض والمناعة', 
+    id: "disease", 
+    title: "الأمراض والمناعة", 
     icon: Stethoscope, 
-    prompt: 'أعطني أحدث التطورات في تشخيص وعلاج أمراض الأسماك (البلطي، القاروص، الدنيس) وطرق رفع المناعة. ركز على اللقاحات، البروبيوتيك، والوقاية من الأمراض الشائعة في مصر. نسق الإجابة في نقاط واضحة ومختصرة.' 
+    prompt: "أعطني أحدث التطورات في تشخيص وعلاج أمراض الأسماك (البلطي، القاروص، الدنيس) وطرق رفع المناعة. ركز على اللقاحات، البروبيوتيك، والوقاية من الأمراض الشائعة في مصر. نسق الإجابة في نقاط واضحة ومختصرة." 
   },
   { 
-    id: 'breeding', 
-    title: 'تقنيات التربية الحديثة', 
+    id: "breeding", 
+    title: "تقنيات التربية الحديثة", 
     icon: Lightbulb, 
-    prompt: 'أعطني أحدث التقنيات في طرق التربية وإدارة المزارع السمكية. ركز على تكنولوجيا البيوفلوك (Biofloc)، الاستزراع التكاملي (Aquaponics)، وتطبيقات إنترنت الأشياء (IoT) والذكاء الاصطناعي في المزارع. نسق الإجابة في نقاط واضحة ومختصرة.' 
+    prompt: "أعطني أحدث التقنيات في طرق التربية وإدارة المزارع السمكية. ركز على تكنولوجيا البيوفلوك (Biofloc)، الاستزراع التكاملي (Aquaponics)، وتطبيقات إنترنت الأشياء (IoT) والذكاء الاصطناعي في المزارع. نسق الإجابة في نقاط واضحة ومختصرة." 
   }
 ];
 
@@ -47,24 +47,13 @@ export default function LatestUpdates() {
 
     setCategoryData(prev => ({ ...prev, [id]: { content: "", isLoading: true, error: "" } }));
 
-    const ai = getAIClient();
-
-    if (!ai) {
-      setCategoryData(prev => ({ 
-        ...prev, 
-        [id]: { content: "", isLoading: false, error: "مفتاح API غير متوفر. يرجى إضافته من صفحة الإعدادات." } 
-      }));
-      return;
-    }
-
     try {
-      const response = await ai.models.generateContent({
-        model: "gemini-1.5-flash",
+      const response = await tryAIRequest({
+        model: "gemini-3-flash-preview",
         contents: prompt,
-        config: {
-          systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
-        }
+        systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
       });
+
       setCategoryData(prev => ({ 
         ...prev, 
         [id]: { content: response.text || "", isLoading: false, error: "" } 
@@ -75,9 +64,11 @@ export default function LatestUpdates() {
       let friendlyError = `خطأ في الاتصال: ${errorMsg}.`;
       
       if (errorMsg.includes("404") || errorMsg.includes("NOT_FOUND")) {
-        friendlyError = "خطأ 404: المحرك غير موجود. تأكد من إضافة GEMINI_API_KEY في إعدادات Vercel قبل الرفع.";
+        friendlyError = "خطأ 404: المحرك غير موجود. تأكد من إضافة GEMINI_API_KEY في Vercel ثم تذكر عمل 'Redeploy'.";
       } else if (errorMsg.includes("429") || errorMsg.includes("RESOURCE_EXHAUSTED") || errorMsg.includes("credits are depleted")) {
-        friendlyError = "⚠️ انتهى الرصيد. أضف مفتاحاً جديداً في GEMINI_API_KEY3 في Vercel ثم تذكر عمل Redeploy.";
+        friendlyError = "⚠️ انتهى الرصيد في جميع المفاتيح. أضف مفتاحاً جديداً في GEMINI_API_KEY3 في Vercel ثم اذهب لتبويب Deployments واضغط 'Redeploy'.";
+      } else if (errorMsg.includes("No API keys")) {
+        friendlyError = "⚠️ لم يتم العثور على أي مفاتيح API. يرجى إضافتها في إعدادات البيئة (Environment Variables) في Vercel.";
       }
 
       setCategoryData(prev => ({ 

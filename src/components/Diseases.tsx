@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Stethoscope, AlertTriangle, ShieldCheck, Fish, Search, ChevronLeft, Bot, Book, Send, Loader2, Syringe, Upload, Image as ImageIcon, Clock, Trash2, X, Filter, Microscope, Bug, Droplet } from "lucide-react";
-import { getAIClient } from "../lib/ai";
+import { tryAIRequest } from "../lib/ai";
 import ReactMarkdown from "react-markdown";
 
 interface DiagnosisRecord {
@@ -255,14 +255,6 @@ export default function Diseases() {
     setDiagnosisError("");
     setDiagnosisResult("");
 
-    const ai = getAIClient();
-
-    if (!ai) {
-      setDiagnosisError("⚠️ مفتاح الذكاء الاصطناعي (API Key) غير متوفر. يرجى إضافته في إعدادات التطبيق لكي أتمكن من مساعدتك.");
-      setIsDiagnosing(false);
-      return;
-    }
-
     try {
       const promptText = `أنا مربي أسماك وعندي مشكلة في الحوض. 
 نوع السمك: ${DISEASES_DATA[diagnosisFish].name}. 
@@ -275,21 +267,18 @@ ${symptoms ? `الأعراض التي ألاحظها: ${symptoms}.` : 'يوجد 
 
 نسق الإجابة في نقاط واضحة ومختصرة باللغة العربية.`;
 
-      const parts: any[] = [{ text: promptText }];
-      
-      if (imageFile && imagePreview) {
-        const base64Data = imagePreview.split(',')[1];
-        parts.push({
-          inlineData: {
-            data: base64Data,
-            mimeType: imageFile.type
-          }
-        });
-      }
+      const imageParts = (imageFile && imagePreview) ? [{
+        inlineData: {
+          data: imagePreview.split(',')[1],
+          mimeType: imageFile.type
+        }
+      }] : [];
 
-      const response = await ai.models.generateContent({
-        model: "gemini-1.5-flash",
-        contents: { parts },
+      const response = await tryAIRequest({
+        model: "gemini-3-flash-preview",
+        contents: { 
+          parts: [{ text: promptText }, ...imageParts] 
+        },
       });
       
       const resultText = response.text || "";
@@ -312,8 +301,12 @@ ${symptoms ? `الأعراض التي ألاحظها: ${symptoms}.` : 'يوجد 
       const errorMsg = err.message || "";
       let friendlyError = "حدث خطأ أثناء التشخيص. تأكد من اتصالك بالإنترنت أو صلاحية مفتاح API.";
       
-      if (errorMsg.includes("429") || errorMsg.includes("RESOURCE_EXHAUSTED") || errorMsg.includes("credits are depleted")) {
-        friendlyError = "⚠️ لقد انتهى الرصيد المتاح. يرجى إضافة مفتاح جديد في GEMINI_API_KEY3 في Vercel ثم تذكر عمل (Redeploy) لتفعيل المفتاح.";
+      if (errorMsg.includes("404") || errorMsg.includes("NOT_FOUND")) {
+        friendlyError = "خطأ 404: المحرك غير موجود. تأكد من عمل 'Redeploy' في Vercel بعد إضافة المفاتيح.";
+      } else if (errorMsg.includes("429") || errorMsg.includes("RESOURCE_EXHAUSTED") || errorMsg.includes("credits are depleted")) {
+        friendlyError = "⚠️ عذراً، انتهى الرصيد في جميع المفاتيح المتاحة (3 مفاتيح). يرجى إضافة مفتاح جديد لـ GEMINI_API_KEY3 أو شحن الرصيد ثم عمل 'Redeploy'.";
+      } else if (errorMsg.includes("No API keys")) {
+        friendlyError = "⚠️ لم يتم العثور على أي مفاتيح API. يرجى إضافتها في Vercel لكي يتمكن المستشار من تشخيص الحالة.";
       }
       
       setDiagnosisError(friendlyError);

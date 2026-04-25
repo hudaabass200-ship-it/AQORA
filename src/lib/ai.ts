@@ -1,24 +1,82 @@
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 
-export const getApiKey = () => {
-  if (process.env.GEMINI_API_KEY3) {
-    console.log("Using API Key Source: GEMINI_API_KEY3");
-    return process.env.GEMINI_API_KEY3;
+/**
+ * Returns an array of all available API keys from environment variables.
+ */
+export const getAllAvailableKeys = (): string[] => {
+  const keys: string[] = [];
+  if (process.env.GEMINI_API_KEY) keys.push(process.env.GEMINI_API_KEY);
+  if (process.env.GEMINI_API_KEY2) keys.push(process.env.GEMINI_API_KEY2);
+  if (process.env.GEMINI_API_KEY3) keys.push(process.env.GEMINI_API_KEY3);
+  
+  const uniqueKeys = Array.from(new Set(keys)).filter(k => k.trim().length > 0);
+  
+  if (uniqueKeys.length > 0) {
+    console.log(`AI Configuration: Found ${uniqueKeys.length} available API keys.`);
+  } else {
+    console.warn("AI Configuration: No API keys found in environment variables.");
   }
-  if (process.env.GEMINI_API_KEY) {
-    console.log("Using API Key Source: GEMINI_API_KEY (Default)");
-    return process.env.GEMINI_API_KEY;
-  }
-  if (process.env.GEMINI_API_KEY2) {
-    console.log("Using API Key Source: GEMINI_API_KEY2");
-    return process.env.GEMINI_API_KEY2;
-  }
-  return "";
+  
+  return uniqueKeys;
 };
 
-export const getAIClient = () => {
-  const key = getApiKey();
-  return key ? new GoogleGenAI({ apiKey: key }) : null;
+/**
+ * Gets a specific AI client for a given key.
+ */
+export const getAIClientForKey = (key: string) => {
+  return new GoogleGenAI({ apiKey: key });
+};
+
+/**
+ * Automatically attempts an AI request with all available keys if a rate limit error (429) occurs.
+ */
+export const tryAIRequest = async (config: {
+  model?: string;
+  contents: any;
+  systemInstruction?: string;
+  tools?: any[];
+}) => {
+  const keys = getAllAvailableKeys();
+  if (keys.length === 0) {
+    throw new Error("No API keys found. Please add GEMINI_API_KEY, GEMINI_API_KEY2, or GEMINI_API_KEY3.");
+  }
+
+  const modelName = config.model || "gemini-3-flash-preview";
+  let lastError: any = null;
+
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+    if (!key) continue;
+
+    try {
+      const ai = getAIClientForKey(key);
+      
+      const response = await ai.models.generateContent({
+        model: modelName,
+        contents: config.contents.contents || config.contents,
+        config: {
+          systemInstruction: config.systemInstruction,
+          tools: config.tools,
+        }
+      });
+
+      return response;
+    } catch (error: any) {
+      lastError = error;
+      const errorMsg = error.message || "";
+      
+      // If it's a rate limit error or quota exceeded, try the next key
+      if (errorMsg.includes("429") || errorMsg.includes("RESOURCE_EXHAUSTED") || errorMsg.includes("credits are depleted")) {
+        console.warn(`Key ${i + 1} exhausted, trying next key...`);
+        continue;
+      }
+      
+      // If it's another error (like 404 or auth), throw it
+      throw error; 
+    }
+  }
+
+  throw lastError;
 };
 
 export const FISH_FARMING_SYSTEM_INSTRUCTION = `أنت Aqora AI، خبير عالمي في الاستزراع السمكي.

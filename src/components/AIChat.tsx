@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Send, Bot, User, Loader2, Image as ImageIcon, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { getAIClient, FISH_FARMING_SYSTEM_INSTRUCTION, FISH_FARMING_TOOLS } from "../lib/ai";
+import { tryAIRequest, FISH_FARMING_SYSTEM_INSTRUCTION, FISH_FARMING_TOOLS } from "../lib/ai";
 import { getEgyptAquacultureProduction, getFishSpeciesInfo, getFishTaxonomy } from "../lib/api-tools";
 
 interface Message {
@@ -63,18 +63,14 @@ export default function AIChat() {
     };
     setMessages((prev) => [...prev, newUserMsg]);
     
-    const ai = getAIClient();
-
-    if (!ai) {
-      setMessages((prev) => [...prev, { 
-        id: Date.now().toString(), 
-        role: "model", 
-        content: "⚠️ عذراً، مفتاح الذكاء الاصطناعي (API Key) غير متوفر. يرجى إضافته من صفحة الإعدادات لكي أتمكن من مساعدتك." 
-      }]);
-      return;
-    }
-
     setIsLoading(true);
+
+    const imageParts = (imageFile && imagePreview) ? [{
+      inlineData: {
+        data: imagePreview.split(',')[1],
+        mimeType: imageFile.type
+      }
+    }] : [];
 
     try {
       // Format history for Gemini
@@ -86,35 +82,27 @@ export default function AIChat() {
       const userParts: any[] = [];
       if (userMsg) userParts.push({ text: userMsg });
       if (!userMsg && imageFile) userParts.push({ text: "ما رأيك في هذه الصورة؟" });
-      
-      if (imageFile && imagePreview) {
-        const base64Data = imagePreview.split(',')[1];
-        userParts.push({
-          inlineData: {
-            data: base64Data,
-            mimeType: imageFile.type
-          }
-        });
-      }
+      userParts.push(...imageParts);
       
       currentHistory.push({ role: "user", parts: userParts });
       
-      // Clear image after sending
+      // Clear image
       clearImage();
 
-      let response = await ai.models.generateContent({
-        model: "gemini-1.5-flash",
+      const response = await tryAIRequest({
+        model: "gemini-3-flash-preview",
         contents: currentHistory,
-        config: {
-          systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
-          tools: FISH_FARMING_TOOLS
-        }
+        systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
+        tools: FISH_FARMING_TOOLS
       });
 
+      // Gemini function calling handler
+      let finalResponse = response;
       let callCount = 0;
-      while (response.functionCalls && response.functionCalls.length > 0 && callCount < 3) {
+      
+      while (finalResponse.functionCalls && finalResponse.functionCalls.length > 0 && callCount < 4) {
         callCount++;
-        const call = response.functionCalls[0];
+        const call = finalResponse.functionCalls[0];
         let apiResult: any = {};
 
         if (call.name === "getEgyptAquacultureProduction" || call.name === "get_egypt_aquaculture_production") {
@@ -142,17 +130,15 @@ export default function AIChat() {
           }]
         });
 
-        response = await ai.models.generateContent({
-          model: "gemini-1.5-flash",
+        finalResponse = await tryAIRequest({
+          model: "gemini-3-flash-preview",
           contents: currentHistory,
-          config: {
-            systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
-            tools: FISH_FARMING_TOOLS
-          }
+          systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
+          tools: FISH_FARMING_TOOLS
         });
       }
 
-      const reply = response.text || "عذراً، حدث خطأ في معالجة طلبك.";
+      const reply = finalResponse.text || "عذراً، لم أستطع معالجة طلبك.";
       setMessages((prev) => [...prev, { id: Date.now().toString(), role: "model", content: reply }]);
     } catch (error: any) {
       console.error("Chat error:", error);
@@ -160,9 +146,9 @@ export default function AIChat() {
       
       let friendlyError = `عذراً، حدث خطأ في الاتصال: ${errorDetail}.`;
       if (errorDetail.includes("404") || errorDetail.includes("NOT_FOUND")) {
-        friendlyError = "خطأ 404: لم يتم العثور على محرك الذكاء الاصطناعي. يرجى التأكد من إضافة مفتاح API (GEMINI_API_KEY) في إعدادات Vercel قبل عملية الرفع (Deployment).";
+        friendlyError = "خطأ 404: المحرك غير موجود. تأكد من عمل 'Redeploy' في Vercel بعد إضافة المفاتيح.";
       } else if (errorDetail.includes("429") || errorDetail.includes("RESOURCE_EXHAUSTED") || errorDetail.includes("credits are depleted")) {
-        friendlyError = "⚠️ خطأ في الرصيد: لقد انتهى الرصيد المتاح لمفاتيحك. يرجى إضافة مفتاح جديد لـ GEMINI_API_KEY3 في إعدادات Vercel ثم تذكر عمل (Redeploy/Deployments) لتطبيق التغيير.";
+        friendlyError = "⚠️ عذراً، انتهى الرصيد في جميع المفاتيح المتاحة (3 مفاتيح). يرجى إضافة مفتاح جديد لـ GEMINI_API_KEY3 أو شحن الرصيد ثم عمل Redeploy.";
       }
 
       setMessages((prev) => [...prev, { 
