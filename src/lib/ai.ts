@@ -1,7 +1,7 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
 export const getApiKey = () => {
-  return process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY2 || process.env.GEMINI_API_KEY3 || "";
+  return process.env.GEMINI_API_KEY3 || process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY2 || "";
 };
 
 export const getAIClient = () => {
