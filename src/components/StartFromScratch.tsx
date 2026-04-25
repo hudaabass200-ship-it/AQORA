@@ -145,7 +145,7 @@ export default function StartFromScratch({ setActiveTab }: StartFromScratchProps
       3. نسق الإجابة في خطوات واضحة ومبسطة باستخدام Markdown مع إبراز الفقرة الخاصة بحساب عدد الأسماك.`;
 
       const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-1.5-flash",
         contents: prompt,
       });
 
@@ -159,6 +159,8 @@ export default function StartFromScratch({ setActiveTab }: StartFromScratchProps
         friendlyError = "خطأ 404: لم يتم العثور على محرك الذكاء الاصطناعي. يرجى التأكد من إضافة مفتاح API (GEMINI_API_KEY) بشكل صحيح في إعدادات Vercel قبل عملية الرفع (Deployment).";
       } else if (errorDetail.includes("API key")) {
         friendlyError = "خطأ في مفتاح API: يبدو أن المفتاح المستخدم غير صحيح أو غير مفعل. تأكد من نسخه بشكل كامل من Google AI Studio.";
+      } else if (errorDetail.includes("429") || errorDetail.includes("RESOURCE_EXHAUSTED") || errorDetail.includes("credits are depleted")) {
+        friendlyError = "⚠️ خطأ في الحساب: لقد انتهى الرصيد المتاح لمفتاح API الخاص بك. يرجى شحن الرصيد في Google AI Studio أو استخدام مفتاح جديد.";
       }
       
       setGeneratedGuide(friendlyError);

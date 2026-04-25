@@ -59,7 +59,7 @@ export default function LatestUpdates() {
 
     try {
       const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-1.5-flash",
         contents: prompt,
         config: {
           systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
@@ -76,6 +76,8 @@ export default function LatestUpdates() {
       
       if (errorMsg.includes("404") || errorMsg.includes("NOT_FOUND")) {
         friendlyError = "خطأ 404: المحرك غير موجود. تأكد من إضافة GEMINI_API_KEY في إعدادات Vercel قبل الرفع.";
+      } else if (errorMsg.includes("429") || errorMsg.includes("RESOURCE_EXHAUSTED") || errorMsg.includes("credits are depleted")) {
+        friendlyError = "⚠️ لقد انتهى الرصيد المتاح لمفتاح API الخاص بك. يرجى شحن الرصيد في Google AI Studio أو استخدام مفتاح جديد.";
       }
 
       setCategoryData(prev => ({ 

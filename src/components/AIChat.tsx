@@ -103,7 +103,7 @@ export default function AIChat() {
       clearImage();
 
       let response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-1.5-flash",
         contents: currentHistory,
         config: {
           systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
@@ -143,7 +143,7 @@ export default function AIChat() {
         });
 
         response = await ai.models.generateContent({
-          model: "gemini-3-flash-preview",
+          model: "gemini-1.5-flash",
           contents: currentHistory,
           config: {
             systemInstruction: FISH_FARMING_SYSTEM_INSTRUCTION,
@@ -161,6 +161,8 @@ export default function AIChat() {
       let friendlyError = `عذراً، حدث خطأ في الاتصال: ${errorDetail}.`;
       if (errorDetail.includes("404") || errorDetail.includes("NOT_FOUND")) {
         friendlyError = "خطأ 404: لم يتم العثور على محرك الذكاء الاصطناعي. يرجى التأكد من إضافة مفتاح API (GEMINI_API_KEY) في إعدادات Vercel قبل عملية الرفع (Deployment).";
+      } else if (errorDetail.includes("429") || errorDetail.includes("RESOURCE_EXHAUSTED") || errorDetail.includes("credits are depleted")) {
+        friendlyError = "⚠️ خطأ في الحساب: لقد انتهى الرصيد المتاح لمفتاح API الخاص بك. يرجى شحن الرصيد في Google AI Studio أو استخدام مفتاح جديد (GEMINI_API_KEY3).";
       }
 
       setMessages((prev) => [...prev, { 

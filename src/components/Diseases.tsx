@@ -1,12 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Stethoscope, AlertTriangle, ShieldCheck, Fish, Search, ChevronLeft, Bot, Book, Send, Loader2, Syringe, Upload, Image as ImageIcon, Clock, Trash2, X, Filter, Microscope, Bug, Droplet } from "lucide-react";
-import { GoogleGenAI } from "@google/genai";
+import { getAIClient } from "../lib/ai";
 import ReactMarkdown from "react-markdown";
-
-// Safe initialization to prevent app crash if env var is missing in Vercel
-const apiKey = process.env.GEMINI_API_KEY2 || process.env.GEMINI_API_KEY || "";
-const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 interface DiagnosisRecord {
   id: string;
@@ -259,8 +255,10 @@ export default function Diseases() {
     setDiagnosisError("");
     setDiagnosisResult("");
 
+    const ai = getAIClient();
+
     if (!ai) {
-      setDiagnosisError("⚠️ مفتاح الذكاء الاصطناعي (GEMINI_API_KEY) غير متوفر. يرجى إضافته في إعدادات Vercel (Environment Variables) ثم إعادة بناء المشروع (Redeploy).");
+      setDiagnosisError("⚠️ مفتاح الذكاء الاصطناعي (API Key) غير متوفر. يرجى إضافته في إعدادات التطبيق لكي أتمكن من مساعدتك.");
       setIsDiagnosing(false);
       return;
     }
@@ -290,7 +288,7 @@ ${symptoms ? `الأعراض التي ألاحظها: ${symptoms}.` : 'يوجد 
       }
 
       const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-1.5-flash",
         contents: { parts },
       });
       
@@ -309,9 +307,16 @@ ${symptoms ? `الأعراض التي ألاحظها: ${symptoms}.` : 'يوجد 
       setHistory(updatedHistory);
       localStorage.setItem("farm_diagnosis_history", JSON.stringify(updatedHistory));
 
-    } catch (err) {
+    } catch (err: any) {
       console.error("Diagnosis error:", err);
-      setDiagnosisError("حدث خطأ أثناء التشخيص. تأكد من اتصالك بالإنترنت أو صلاحية مفتاح API.");
+      const errorMsg = err.message || "";
+      let friendlyError = "حدث خطأ أثناء التشخيص. تأكد من اتصالك بالإنترنت أو صلاحية مفتاح API.";
+      
+      if (errorMsg.includes("429") || errorMsg.includes("RESOURCE_EXHAUSTED") || errorMsg.includes("credits are depleted")) {
+        friendlyError = "⚠️ لقد انتهى الرصيد المتاح لمفتاح API الخاص بك. يرجى شحن الرصيد في Google AI Studio أو استخدام مفتاح جديد.";
+      }
+      
+      setDiagnosisError(friendlyError);
     } finally {
       setIsDiagnosing(false);
     }
