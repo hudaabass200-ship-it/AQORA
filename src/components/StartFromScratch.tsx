@@ -226,6 +226,8 @@ export default function StartFromScratch({ setActiveTab }: StartFromScratchProps
               <option value="مكثف">مكثف (كثافة عالية، إنتاجية عالية)</option>
               <option value="شبه مكثف">شبه مكثف (متوازن)</option>
               <option value="غير مكثف">غير مكثف (طبيعي، كثافة منخفضة)</option>
+              <option value="نظام مغلق RAS">نظام مغلق (RAS)</option>
+              <option value="بيوفلوك">بيوفلوك</option>
             </select>
           </div>
 
@@ -241,7 +243,6 @@ export default function StartFromScratch({ setActiveTab }: StartFromScratchProps
               <option value="ترابي">حوض ترابي</option>
               <option value="أسمنتي">حوض أسمنتي</option>
               <option value="فايبرجلاس">خزان فايبرجلاس / بلاستيك</option>
-              <option value="نظام مغلق RAS">نظام مغلق (RAS)</option>
             </select>
           </div>
 
